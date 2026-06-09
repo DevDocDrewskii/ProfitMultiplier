@@ -39,16 +39,16 @@ repositories {
     maven("https://jitpack.io")
 }
 dependencies {
-    // JitPack groupId is always com.github.<YourGitHubUser>
-    // artifactId is your repository name; version is the git tag (or commit).
-    compileOnly("com.github.YourUser:ProfitMultiplier:1.0.0")
+    // JitPack groupId is com.github.<GitHubUser>, artifactId is the repo name,
+    // version is the git tag (or commit hash).
+    compileOnly("com.github.DevDocDrewskii:ProfitMultiplier:1.0.0")
 }
 ```
 
 **Gradle (Groovy DSL)**
 ```groovy
 repositories { maven { url 'https://jitpack.io' } }
-dependencies { compileOnly 'com.github.YourUser:ProfitMultiplier:1.0.0' }
+dependencies { compileOnly 'com.github.DevDocDrewskii:ProfitMultiplier:1.0.0' }
 ```
 
 **Maven**
@@ -61,7 +61,7 @@ dependencies { compileOnly 'com.github.YourUser:ProfitMultiplier:1.0.0' }
 </repositories>
 
 <dependency>
-  <groupId>com.github.YourUser</groupId>
+  <groupId>com.github.DevDocDrewskii</groupId>
   <artifactId>ProfitMultiplier</artifactId>
   <version>1.0.0</version>
   <scope>provided</scope>
@@ -157,7 +157,7 @@ public void onReset(PlayerDataResetEvent event) {
    git add .
    git commit -m "ProfitMultiplier 1.0.0"
    git branch -M main
-   git remote add origin https://github.com/YourUser/ProfitMultiplier.git
+   git remote add origin https://github.com/DevDocDrewskii/ProfitMultiplier.git
    git push -u origin main
    ```
 2. **Tag a release** (JitPack builds tags on demand):
@@ -166,10 +166,10 @@ public void onReset(PlayerDataResetEvent event) {
    git push origin 1.0.0
    ```
    (Or create a Release in the GitHub UI — that also creates the tag.)
-3. **Trigger the build**: go to `https://jitpack.io/#YourUser/ProfitMultiplier`,
+3. **Trigger the build**: go to `https://jitpack.io/#DevDocDrewskii/ProfitMultiplier`,
    click the tag, press **Get it**. JitPack runs the build (using the pinned
    JDK 21 from `jitpack.yml`) and serves the artifact.
-4. Share the coordinate from §2 (`com.github.YourUser:ProfitMultiplier:1.0.0`).
+4. Share the coordinate from §2 (`com.github.DevDocDrewskii:ProfitMultiplier:1.0.0`).
    A green build on the JitPack page means it's live.
 
 ### Route B — Direct jar download (GitHub Releases / SpigotMC / Polymart)

@@ -3,6 +3,7 @@
 ![Version](https://img.shields.io/badge/version-1.0.0-brightgreen)
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.8%20%E2%86%92%2026.x-blue)
 ![Java](https://img.shields.io/badge/Java-8%20bytecode%20(built%20with%2021)-orange)
+[![JitPack](https://jitpack.io/v/DevDocDrewskii/ProfitMultiplier.svg)](https://jitpack.io/#DevDocDrewskii/ProfitMultiplier)
 
 **Reward your grinders.** ProfitMultiplier gives players a *cumulative* sell-multiplier
 that climbs as they sell — the more they sell, the more each sale is worth. It hooks into
@@ -178,7 +179,7 @@ reading progression, reacting to milestones, and adjusting the boost. Add it via
 
 ```kotlin
 repositories { maven("https://jitpack.io") }
-dependencies { compileOnly("com.github.YourUser:ProfitMultiplier:1.0.0") }
+dependencies { compileOnly("com.github.DevDocDrewskii:ProfitMultiplier:1.0.0") }
 ```
 
 Full guide, examples, and publishing instructions: **[DEVELOPERS.md](DEVELOPERS.md)**.
@@ -199,6 +200,11 @@ Outputs to `build/libs/`:
 Built with the JDK 21 toolchain but emits **Java 8 bytecode** for maximum server compatibility.
 
 ---
+
+## 🆘 Support
+
+- **Repository:** <https://github.com/DevDocDrewskii/ProfitMultiplier>
+- **Issues / bug reports:** <https://github.com/DevDocDrewskii/ProfitMultiplier/issues>
 
 ## 📄 License & credits
 
