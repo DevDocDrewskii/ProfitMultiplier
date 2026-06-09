@@ -45,9 +45,7 @@ groups:
   crops:
     icon: GRASS_BLOCK
     display-name: "Crops"
-
     stack-mode: group
-
     materials:
       - WHEAT
       - CARROT
@@ -76,30 +74,6 @@ groups:
         multiplier: 1.3
         icon: KELP
 
-  mob_drops:
-    icon: ROTTEN_FLESH
-    display-name: "Mob Drops"
-    currency: tokens
-    materials:
-      - ROTTEN_FLESH
-      - BONE
-      - STRING
-      - SPIDER_EYE
-      - GUNPOWDER
-      - ENDER_PEARL
-      - SLIME_BALL
-      - BLAZE_ROD
-    tiers:
-      - threshold: 5000
-        multiplier: 1.1
-        icon: BONE
-      - threshold: 50000
-        multiplier: 1.25
-        icon: ENDER_PEARL
-      - threshold: 500000
-        multiplier: 1.5
-        icon: BLAZE_ROD
-
   ores:
     icon: DIAMOND
     display-name: "Ores"
@@ -124,14 +98,155 @@ groups:
         multiplier: 1.3
         icon: DIAMOND
 
+  resources:
+    icon: OAK_LOG
+    display-name: "Resources"
+    materials:
+      - OAK_LOG
+      - SPRUCE_LOG
+      - BIRCH_LOG
+      - JUNGLE_LOG
+      - ACACIA_LOG
+      - DARK_OAK_LOG
+      - MANGROVE_LOG
+      - CHERRY_LOG
+      - CRIMSON_STEM
+      - WARPED_STEM
+    tiers:
+      - threshold: 5000
+        multiplier: 1.1
+        icon: OAK_LOG
+      - threshold: 50000
+        multiplier: 1.2
+        icon: BIRCH_LOG
+      - threshold: 500000
+        multiplier: 1.3
+        icon: DARK_OAK_LOG
+
+  excavation:
+    icon: IRON_SHOVEL
+    display-name: "Excavation"
+    materials:
+      - DIRT
+      - COARSE_DIRT
+      - SAND
+      - RED_SAND
+      - GRAVEL
+      - CLAY_BALL
+      - COBBLESTONE
+      - COBBLED_DEEPSLATE
+      - NETHERRACK
+      - SOUL_SAND
+    tiers:
+      - threshold: 10000
+        multiplier: 1.1
+        icon: COBBLESTONE
+      - threshold: 100000
+        multiplier: 1.2
+        icon: SAND
+      - threshold: 1000000
+        multiplier: 1.3
+        icon: GRAVEL
+
+  fishing:
+    icon: COD
+    display-name: "Fishing"
+    currency: gems
+    materials:
+      - COD
+      - SALMON
+      - TROPICAL_FISH
+      - PUFFERFISH
+      - INK_SAC
+      - PRISMARINE_SHARD
+      - PRISMARINE_CRYSTALS
+      - NAUTILUS_SHELL
+    tiers:
+      - threshold: 2000
+        multiplier: 1.1
+        icon: COD
+      - threshold: 20000
+        multiplier: 1.25
+        icon: SALMON
+      - threshold: 200000
+        multiplier: 1.5
+        icon: NAUTILUS_SHELL
+
+  nether:
+    icon: NETHERRACK
+    display-name: "Nether"
+    materials:
+      - QUARTZ
+      - GLOWSTONE_DUST
+      - MAGMA_CREAM
+      - GHAST_TEAR
+      - NETHER_BRICK
+      - BLAZE_POWDER
+      - NETHERITE_SCRAP
+      - ANCIENT_DEBRIS
+      - CRYING_OBSIDIAN
+    tiers:
+      - threshold: 5000
+        multiplier: 1.1
+        icon: QUARTZ
+      - threshold: 50000
+        multiplier: 1.25
+        icon: GLOWSTONE_DUST
+      - threshold: 250000
+        multiplier: 1.4
+        icon: NETHERITE_SCRAP
+
+  mob_drops:
+    icon: ROTTEN_FLESH
+    display-name: "Mob Drops"
+    currency: tokens
+    materials:
+      - ROTTEN_FLESH
+      - BONE
+      - STRING
+      - SPIDER_EYE
+      - GUNPOWDER
+      - ENDER_PEARL
+      - SLIME_BALL
+      - BLAZE_ROD
+    tiers:
+      - threshold: 5000
+        multiplier: 1.1
+        icon: BONE
+      - threshold: 50000
+        multiplier: 1.25
+        icon: ENDER_PEARL
+      - threshold: 500000
+        multiplier: 1.5
+        icon: BLAZE_ROD
+
+  building:
+    icon: BRICKS
+    display-name: "Building Blocks"
+    materials:
+      - BRICK
+      - BRICKS
+      - STONE_BRICKS
+      - SMOOTH_STONE
+      - TERRACOTTA
+      - QUARTZ_BLOCK
+      - SANDSTONE
+      - GLASS
+    tiers:
+      - threshold: 10000
+        multiplier: 1.1
+        icon: STONE_BRICKS
+      - threshold: 100000
+        multiplier: 1.2
+        icon: TERRACOTTA
+      - threshold: 1000000
+        multiplier: 1.3
+        icon: QUARTZ_BLOCK
+
 default:
-
   enabled: true
-
   threshold: 1000
-
   multiplier: 1.1
-
   blacklist:
     - BEDROCK
     - BARRIER
@@ -140,7 +255,6 @@ default:
 
 auto-reset:
   enabled: false
-
   interval: WEEKLY
 
 debug: false

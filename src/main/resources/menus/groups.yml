@@ -1,5 +1,5 @@
 title: "&8» &2&lMultiplier Groups"
-size: 54
+size: 27
 update: true
 
 filler:
@@ -9,9 +9,6 @@ filler:
 
 content-slots:
   - "10-16"
-  - "19-25"
-  - "28-34"
-  - "37-43"
 
 content-source: groups
 
@@ -25,19 +22,16 @@ content:
     - ""
     - "&7Next tier: &e{threshold} &8(&f{remaining_short} &7to go&8)"
     - "{progress_bar} &7{progress_percent}%"
-    - ""
-    - "&8PAPI: %profitmultiplier_group_multiplier_{group}%"
   actions:
     any:
-      - "[message] &a{group_name}&7: &f{sold} &7sold — currently &a{current_multiplier}x&7."
+      - "[message] &a{group_name}&7: &f{sold} &7sold - currently &a{current_multiplier}x&7."
       - "[sound] UI_BUTTON_CLICK 1 1.2"
 
 items:
-
   previous:
     material: ARROW
-    slot: 48
-    name: "&e« Previous Page"
+    slot: 18
+    name: "&e<- Previous Page"
     hide-on-first-page: true
     lore:
       - "&7Go to page &f{previous_page}&7."
@@ -48,16 +42,16 @@ items:
 
   page-info:
     material: PAPER
-    slot: 49
+    slot: 22
     name: "&fPage &a{page}&7/&a{total_pages}"
     lore:
       - "&7Browse every sell-multiplier group."
-      - "&7Add more in &fconfig.yml &7→ they show up here."
+      - "&7Add more in config.yml and they show up here."
 
   next:
     material: ARROW
-    slot: 50
-    name: "&eNext Page »"
+    slot: 24
+    name: "&eNext Page ->"
     hide-on-last-page: true
     lore:
       - "&7Go to page &f{next_page}&7."
@@ -68,7 +62,7 @@ items:
 
   close:
     material: BARRIER
-    slot: 53
+    slot: 26
     name: "&c&lClose"
     actions:
       any:

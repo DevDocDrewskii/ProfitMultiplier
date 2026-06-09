@@ -29,6 +29,9 @@ public class LangManager {
             plugin.saveResource("lang.yml", false);
         }
         YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
+        if (mergeMissingDefaults(yml)) {
+            yml = YamlConfiguration.loadConfiguration(file);
+        }
 
         messages.clear();
         enabled.clear();
@@ -47,6 +50,37 @@ public class LangManager {
                 }
             }
         }
+    }
+
+    private boolean mergeMissingDefaults(YamlConfiguration yml) {
+        java.io.InputStream in = plugin.getResource("lang.yml");
+        if (in == null) return false;
+        try {
+            YamlConfiguration defaults = YamlConfiguration.loadConfiguration(
+                    new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8));
+            boolean missing = false;
+            for (String key : defaults.getKeys(true)) {
+                if (!yml.contains(key)) {
+                    missing = true;
+                    break;
+                }
+            }
+            if (missing) {
+                yml.setDefaults(defaults);
+                yml.options().copyDefaults(true);
+                yml.save(file);
+                plugin.getLogger().info("Updated lang.yml with new default messages.");
+                return true;
+            }
+        } catch (Exception e) {
+            plugin.getLogger().warning("Could not merge lang defaults: " + e.getMessage());
+        } finally {
+            try {
+                in.close();
+            } catch (java.io.IOException ignored) {
+            }
+        }
+        return false;
     }
 
     public boolean isActive(String key) {

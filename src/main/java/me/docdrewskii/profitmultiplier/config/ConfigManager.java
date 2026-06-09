@@ -37,6 +37,7 @@ public class ConfigManager {
     public void load() {
         plugin.saveDefaultConfig();
         plugin.reloadConfig();
+        mergeMissingDefaults();
 
         itemTiers.clear();
         groups.clear();
@@ -317,6 +318,37 @@ public class ConfigManager {
             }
         }
         return tiers;
+    }
+
+    private void mergeMissingDefaults() {
+        java.io.InputStream in = plugin.getResource("config.yml");
+        if (in == null) return;
+        try {
+            org.bukkit.configuration.file.YamlConfiguration defaults =
+                    org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
+                            new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8));
+            boolean missing = false;
+            for (String key : defaults.getKeys(true)) {
+                if (!plugin.getConfig().contains(key)) {
+                    missing = true;
+                    break;
+                }
+            }
+            if (missing) {
+                plugin.getConfig().setDefaults(defaults);
+                plugin.getConfig().options().copyDefaults(true);
+                plugin.saveConfig();
+                plugin.reloadConfig();
+                plugin.getLogger().info("Updated config.yml with new default keys.");
+            }
+        } catch (Exception e) {
+            plugin.getLogger().warning("Could not merge config defaults: " + e.getMessage());
+        } finally {
+            try {
+                in.close();
+            } catch (java.io.IOException ignored) {
+            }
+        }
     }
 
     private long parseInterval(String s) {

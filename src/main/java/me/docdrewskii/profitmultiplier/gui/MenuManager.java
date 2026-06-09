@@ -52,10 +52,7 @@ public class MenuManager {
             folder.mkdirs();
         }
 
-        File defaultMenu = new File(folder, "sellmulti.yml");
-        if (!defaultMenu.exists()) {
-            plugin.saveResource("menus/sellmulti.yml", false);
-        }
+        saveDefaultMenus(folder);
 
         File[] files = folder.listFiles((dir, n) -> n.toLowerCase(Locale.ROOT).endsWith(".yml"));
         if (files == null) return;
@@ -70,6 +67,38 @@ public class MenuManager {
             }
         }
         plugin.getLogger().info("Loaded " + menus.size() + " menu(s): " + menus.keySet());
+    }
+
+    private void saveDefaultMenus(File folder) {
+        boolean scanned = false;
+        try {
+            java.net.URL location = plugin.getClass().getProtectionDomain().getCodeSource().getLocation();
+            try (java.util.jar.JarFile jar = new java.util.jar.JarFile(new File(location.toURI()))) {
+                java.util.Enumeration<java.util.jar.JarEntry> entries = jar.entries();
+                while (entries.hasMoreElements()) {
+                    String name = entries.nextElement().getName();
+                    if (name.startsWith("menus/") && !name.endsWith("/")
+                            && name.toLowerCase(Locale.ROOT).endsWith(".yml")) {
+                        scanned = true;
+                        if (!new File(plugin.getDataFolder(), name).exists()) {
+                            plugin.saveResource(name, false);
+                        }
+                    }
+                }
+            }
+        } catch (Throwable ignored) {
+            // Could not read the jar (exploded classpath in dev) — fall back to known names.
+        }
+        if (!scanned) {
+            for (String name : new String[]{"sellmulti.yml", "groups.yml"}) {
+                if (!new File(folder, name).exists()) {
+                    try {
+                        plugin.saveResource("menus/" + name, false);
+                    } catch (IllegalArgumentException ignored) {
+                    }
+                }
+            }
+        }
     }
 
     private Menu loadMenu(File file) {

@@ -96,6 +96,18 @@ items:
         - "[message] &7You are working toward the &b1.3x &7crop multiplier!"
         - "[sound] ENTITY_EXPERIENCE_ORB_PICKUP 1 1"
 
+  all-groups:
+    material: CHEST
+    slot: 26
+    name: "&6&lAll Multiplier Groups"
+    lore:
+      - "&7View every sell-multiplier group"
+      - "&7and your progress in each one."
+    actions:
+      any:
+        - "[open] groups"
+        - "[sound] UI_BUTTON_CLICK 1 1"
+
   close:
     material: BARRIER
     slot: 22
