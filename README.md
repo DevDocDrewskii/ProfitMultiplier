@@ -6,7 +6,7 @@
 [![JitPack](https://jitpack.io/v/DevDocDrewskii/ProfitMultiplier.svg)](https://jitpack.io/#DevDocDrewskii/ProfitMultiplier)
 
 **Reward your grinders.** ProfitMultiplier gives players a *cumulative* sell-multiplier
-that climbs as they sell — the more they sell, the more each sale is worth. It hooks into
+that climbs as they sell - the more they sell, the more each sale is worth. It hooks into
 your existing shop plugin, so there's nothing to migrate: prices just get boosted at sale
 time based on each player's progression.
 
@@ -16,26 +16,26 @@ time based on each player's progression.
 
 ## ✨ Features
 
-- **Cumulative progression** — multipliers rise as players cross sold-total thresholds and
+- **Cumulative progression** - multipliers rise as players cross sold-total thresholds and
   stay unlocked. The boost is applied *per unit*: a sale that crosses a threshold only
   boosts the units at/after it.
 - **Three ladder types**
   - **Per-item** ladders (`DIAMOND`, `WHEAT`, …)
-  - **Groups** — many materials sharing one counter (e.g. all *crops*)
+  - **Groups** - many materials sharing one counter (e.g. all *crops*)
   - A **default** ladder for everything else
-- **Stacking control** — per group: group multiplier wins, item multiplier wins, or
+- **Stacking control** - per group: group multiplier wins, item multiplier wins, or
   **both stack** (item `1.5x` × group `1.2x` = `1.8x`).
-- **Multi-shop support** — EconomyShopGUI (+ Premium), ShopGUI+, zShop, UltimateShop, GUIShop.
-- **Custom currencies** — display formatting per group; the multiplier itself is
+- **Multi-shop support** - EconomyShopGUI (+ Premium), ShopGUI+, zShop, UltimateShop, GUIShop.
+- **Custom currencies** - display formatting per group; the multiplier itself is
   currency-agnostic (works with whatever your shop pays in).
-- **Fully configurable GUI** (`/sellmulti`) — filler items, custom items via
+- **Fully configurable GUI** (`/sellmulti`) - filler items, custom items via
   **Nexo / Oraxen / ItemsAdder / HeadDatabase**, **PlaceholderAPI** support everywhere,
   **click actions**, **pagination**, and live-updating progress bars.
 - **PlaceholderAPI** expansion for placards, scoreboards, holograms, etc.
-- **Developer API** — read progression, react to milestones, modify the boost. See
+- **Developer API** - read progression, react to milestones, modify the boost. See
   [DEVELOPERS.md](DEVELOPERS.md).
-- **Wide compatibility** — single jar, Java 8 bytecode, runs on Spigot/Paper **1.8 → 26.x**.
-- **Auto-reset** — optionally wipe everyone's progression on a schedule (seasons/resets).
+- **Wide compatibility** - single jar, Java 8 bytecode, runs on Spigot/Paper **1.8 → 26.x**.
+- **Auto-reset** - optionally wipe everyone's progression on a schedule (seasons/resets).
 
 ---
 
@@ -47,7 +47,7 @@ time based on each player's progression.
 3. *(Optional)* Install **PlaceholderAPI** and any custom-item plugin you want to use in menus.
 4. Restart the server. Edit `plugins/ProfitMultiplier/config.yml`, then `/pm reload`.
 
-Everything is auto-detected — ProfitMultiplier hooks whatever supported shops it finds. The
+Everything is auto-detected - ProfitMultiplier hooks whatever supported shops it finds. The
 startup log lists which hooks activated (`Sell hooks active: [...]`).
 
 ---
@@ -94,7 +94,7 @@ groups:
 ```
 
 Player-facing messages live in `lang.yml` (each individually toggleable). Menus live in the
-`menus/` folder — drop in more `.yml` files to create more menus.
+`menus/` folder - drop in more `.yml` files to create more menus.
 
 ---
 
@@ -194,8 +194,8 @@ Full guide, examples, and publishing instructions: **[DEVELOPERS.md](DEVELOPERS.
 
 Outputs to `build/libs/`:
 
-- `ProfitMultiplier-1.0.0.jar` — the plugin
-- `ProfitMultiplier-API-1.0.0.jar` — the slim developer API jar (+ `-sources`)
+- `ProfitMultiplier-1.0.0.jar` - the plugin
+- `ProfitMultiplier-API-1.0.0.jar` - the slim developer API jar (+ `-sources`)
 
 Built with the JDK 21 toolchain but emits **Java 8 bytecode** for maximum server compatibility.
 
@@ -210,5 +210,5 @@ Built with the JDK 21 toolchain but emits **Java 8 bytecode** for maximum server
 
 Author: **DocDrewskii**.
 
-Custom-item and shop integrations are performed reflectively — none of those plugins are
+Custom-item and shop integrations are performed reflectively - none of those plugins are
 required to build or run ProfitMultiplier.

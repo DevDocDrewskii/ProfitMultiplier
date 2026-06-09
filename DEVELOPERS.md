@@ -1,12 +1,12 @@
-# ProfitMultiplier — Developer API
+# ProfitMultiplier - Developer API
 
 ProfitMultiplier ships a small, stable public API in the package
 `me.docdrewskii.profitmultiplier.api`. Other plugins can read a player's
 sell progression, react to milestones, and even adjust the boosted price
 before it's applied.
 
-The API package depends on **nothing but Bukkit/Spigot/Paper** — no Vault,
-no shop plugin — so it's safe to compile against from any plugin.
+The API package depends on **nothing but Bukkit/Spigot/Paper** - no Vault,
+no shop plugin - so it's safe to compile against from any plugin.
 
 ---
 
@@ -22,16 +22,16 @@ no shop plugin — so it's safe to compile against from any plugin.
 | `ProfitMultiplier-API-1.0.0-sources.jar` | sources for the slim API jar |
 
 The **API jar** is the "API file" you hand to other developers. It contains
-only the interface, the provider, the events and `ResetCause` — never the
+only the interface, the provider, the events and `ResetCause` - never the
 internal implementation.
 
 ---
 
 ## 2. Depending on the API
 
-### Option A — JitPack (recommended)
+### Option A - JitPack (recommended)
 
-After you publish a tag on GitHub (see §5), consumers add:
+Add the JitPack repository and the dependency:
 
 **Gradle (Kotlin DSL)**
 ```kotlin
@@ -69,9 +69,9 @@ dependencies { compileOnly 'com.github.DevDocDrewskii:ProfitMultiplier:1.0.0' }
 ```
 
 > Use `compileOnly` / `provided`: the API is supplied at runtime by the
-> installed ProfitMultiplier plugin — don't shade it into your jar.
+> installed ProfitMultiplier plugin - don't shade it into your jar.
 
-### Option B — Manual jar
+### Option B - Manual jar
 
 Drop `ProfitMultiplier-API-1.0.0.jar` into a `libs/` folder in your project
 and reference it:
@@ -130,7 +130,7 @@ public void onBoost(MultiplierApplyEvent event) {
 }
 ```
 (Note: GUIShop commits the price at quote time, so its sales don't fire the
-cancellable `MultiplierApplyEvent` — all other shops do.)
+cancellable `MultiplierApplyEvent` - all other shops do.)
 
 ### React to milestones / resets
 ```java
@@ -147,47 +147,7 @@ public void onReset(PlayerDataResetEvent event) {
 
 ---
 
-## 5. Publishing your API online
-
-### Route A — JitPack (free, zero infrastructure; what most plugins use)
-
-1. **Put the project on GitHub** (once):
-   ```bash
-   git init
-   git add .
-   git commit -m "ProfitMultiplier 1.0.0"
-   git branch -M main
-   git remote add origin https://github.com/DevDocDrewskii/ProfitMultiplier.git
-   git push -u origin main
-   ```
-2. **Tag a release** (JitPack builds tags on demand):
-   ```bash
-   git tag 1.0.0
-   git push origin 1.0.0
-   ```
-   (Or create a Release in the GitHub UI — that also creates the tag.)
-3. **Trigger the build**: go to `https://jitpack.io/#DevDocDrewskii/ProfitMultiplier`,
-   click the tag, press **Get it**. JitPack runs the build (using the pinned
-   JDK 21 from `jitpack.yml`) and serves the artifact.
-4. Share the coordinate from §2 (`com.github.DevDocDrewskii:ProfitMultiplier:1.0.0`).
-   A green build on the JitPack page means it's live.
-
-### Route B — Direct jar download (GitHub Releases / SpigotMC / Polymart)
-
-1. `./gradlew build` → grab `build/libs/ProfitMultiplier-API-1.0.0.jar`
-   (and the `-sources` jar).
-2. Attach both jars to a **GitHub Release**, or upload them to your
-   SpigotMC/Polymart resource page as a "Developer API" download.
-3. Developers use **Option B** from §2.
-
-### Route C — Your own Maven repo (optional, advanced)
-If you host a repo (Reposilite, Nexus, GitHub Packages), add `credentials`
-and a `maven { url = ... }` block under `publishing { repositories { ... } }`
-in `build.gradle.kts`, then run `./gradlew publish`.
-
----
-
-## 6. API reference
+## 5. API reference
 
 **`ProfitMultiplierAPI`** (selected): `getSold`, `getTotalSold`, `getAllSold`,
 `getMultiplier`, `getMultiplierAt`, `getActiveThreshold`, `getNextThreshold`,
@@ -202,4 +162,4 @@ price), `ThresholdReachedEvent`, `PlayerDataResetEvent`, `ServerDataResetEvent`.
 
 **PlaceholderAPI** (no API dependency needed): `%profitmultiplier_sold_<mat>%`,
 `%profitmultiplier_multiplier_<mat>%`, `%profitmultiplier_group_multiplier_<group>%`,
-and more — see `config.yml`.
+and more - see `config.yml`.
