@@ -1,14 +1,12 @@
 name: ProfitMultiplier
-version: "1.0.0"
+
+version: "${version}"
 main: me.docdrewskii.profitmultiplier.ProfitMultiplier
-# Must be "major.minor[.patch]" format. "1.13" is the lowest modern value:
-# ignored on 1.8-1.12 servers, accepted by everything 1.13 through 26.x.
+
 api-version: "1.13"
 description: Cumulative sell-progression multiplier for multiple shop plugins
 author: DocDrewskii
 
-# Everything is optional — the plugin loads with whatever you have installed. It hooks
-# every supported shop it finds. softdepend just guarantees we load AFTER them.
 softdepend:
   - Vault
   - EconomyShopGUI

@@ -12,29 +12,22 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
-/**
- * Builds player-skull ItemStacks. Base64-texture application uses Mojang's authlib via
- * reflection so we never need a compile-time dependency on {@code com.mojang.authlib}
- * (which the server provides but our build classpath does not).
- */
 public final class SkullUtil {
 
     private SkullUtil() {
     }
 
-    /** A blank player head appropriate for the running server version. */
     public static ItemStack blankHead() {
         Material mat = VersionHelper.resolveMaterial("PLAYER_HEAD");
         if (mat == null) mat = VersionHelper.resolveMaterial("SKULL_ITEM");
-        if (mat == null) return new ItemStack(Material.PUMPKIN); // absurd fallback; never expected
+        if (mat == null) return new ItemStack(Material.PUMPKIN);
         if ("SKULL_ITEM".equals(mat.name())) {
-            // Legacy 1.8-1.12: player head is SKULL_ITEM with data value 3.
+
             return new ItemStack(mat, 1, (short) 3);
         }
         return new ItemStack(mat, 1);
     }
 
-    /** Skull owned by the named player (online lookup; texture resolves when the profile loads). */
     public static ItemStack fromPlayer(String name) {
         ItemStack head = blankHead();
         try {
@@ -44,7 +37,7 @@ public final class SkullUtil {
                 OfflinePlayer offline = Bukkit.getOfflinePlayer(name);
                 meta.setOwningPlayer(offline);
             } catch (Throwable modernFailed) {
-                // Legacy servers only expose the String-based setter.
+
                 meta.setOwner(name);
             }
             head.setItemMeta(meta);
@@ -53,7 +46,6 @@ public final class SkullUtil {
         return head;
     }
 
-    /** Skull textured from a base64 textures value (the long string from minecraft-heads, etc.). */
     public static ItemStack fromBase64(String base64) {
         ItemStack head = blankHead();
         try {
@@ -79,7 +71,7 @@ public final class SkullUtil {
 
             head.setItemMeta(meta);
         } catch (Throwable ignored) {
-            // Any failure just leaves a blank head — acceptable degradation.
+
         }
         return head;
     }

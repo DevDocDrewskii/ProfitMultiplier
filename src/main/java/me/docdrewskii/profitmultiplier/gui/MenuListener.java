@@ -13,7 +13,6 @@ import org.bukkit.inventory.InventoryHolder;
 import java.util.List;
 import java.util.Map;
 
-/** Locks ProfitMultiplier menus (no item movement) and turns clicks into configured actions. */
 public class MenuListener implements Listener {
 
     private final ProfitMultiplier plugin;
@@ -28,7 +27,7 @@ public class MenuListener implements Listener {
         if (!(holder instanceof MenuHolder)) {
             return;
         }
-        // Lock the whole window: prevents shift-clicking, hotbar swaps, number keys, etc.
+
         event.setCancelled(true);
 
         if (!(event.getWhoClicked() instanceof Player)) {
@@ -39,7 +38,7 @@ public class MenuListener implements Listener {
         Inventory clicked = event.getClickedInventory();
         Inventory top = event.getView().getTopInventory();
         if (clicked == null || !clicked.equals(top)) {
-            return; // click landed in the player's own inventory
+            return;
         }
 
         int slot = event.getRawSlot();
@@ -55,7 +54,6 @@ public class MenuListener implements Listener {
             return;
         }
 
-        // Use the exact tokens captured when this slot was rendered (group/tier/page context).
         plugin.getMenuManager().getActionExecutor().run(player, actions, ctx.getTokens());
     }
 

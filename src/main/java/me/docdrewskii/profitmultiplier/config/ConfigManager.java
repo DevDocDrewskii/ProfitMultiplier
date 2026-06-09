@@ -16,9 +16,8 @@ public class ConfigManager {
 
     private final Map<Material, List<MultiplierTier>> itemTiers = new HashMap<>();
 
-    /** group name (lower-case) -> group definition. Insertion order preserved for menus. */
     private final Map<String, ItemGroup> groups = new LinkedHashMap<>();
-    /** reverse lookup: which group a material belongs to (first group that lists it wins). */
+
     private final Map<Material, ItemGroup> materialGroup = new HashMap<>();
 
     private boolean defaultEnabled;
@@ -206,16 +205,10 @@ public class ConfigManager {
         return Long.MAX_VALUE;
     }
 
-    // ---------------------------------------------------------------------
-    //  Groups (cumulative multiplier shared across a set of materials)
-    // ---------------------------------------------------------------------
-
-    /** True when this material has its own explicit {@code items:} ladder (takes priority over groups). */
     public boolean hasItemTiers(Material material) {
         return itemTiers.containsKey(material);
     }
 
-    /** The group a material belongs to, or {@code null} if none. */
     public ItemGroup getGroupFor(Material material) {
         return materialGroup.get(material);
     }
@@ -228,7 +221,6 @@ public class ConfigManager {
         return groups.values();
     }
 
-    /** Highest unlocked multiplier for a group given the player's cumulative group total. */
     public double groupMultiplierAtCount(ItemGroup group, long count) {
         double best = 1.0;
         for (MultiplierTier t : group.getTiers()) {
@@ -237,7 +229,6 @@ public class ConfigManager {
         return best;
     }
 
-    /** The threshold of the highest unlocked tier (0 when none reached yet). */
     public long groupActiveThreshold(ItemGroup group, long count) {
         long best = 0L;
         for (MultiplierTier t : group.getTiers()) {
@@ -246,7 +237,6 @@ public class ConfigManager {
         return best;
     }
 
-    /** The next threshold strictly above {@code count}, or {@link Long#MAX_VALUE} when maxed. */
     public long groupNextThresholdAbove(ItemGroup group, long count) {
         for (MultiplierTier t : group.getTiers()) {
             if (t.getThreshold() > count) return t.getThreshold();
@@ -254,19 +244,6 @@ public class ConfigManager {
         return Long.MAX_VALUE;
     }
 
-    /**
-     * Per-unit sale value for a group sale. As the player's cumulative group total
-     * climbs from {@code prevTotal+1} to {@code prevTotal+amount}, each unit is priced
-     * at the multiplier active at that running total — so a single sale that crosses a
-     * tier boundary only boosts the units at/after the boundary.
-     */
-    /**
-     * Sale value for a material that belongs to a group, honouring the group's
-     * {@link GroupStackMode}. As the sale proceeds, the per-item counter and the group
-     * counter both advance one-per-unit; the effective multiplier is recomputed at every
-     * threshold either counter crosses, so a single sale that straddles a boundary only
-     * boosts the units at/after it. Segmented (not per-unit) so large sales stay fast.
-     */
     public double computeUnifiedSaleValue(Material material, ItemGroup group, GroupStackMode mode,
                                           long prevItem, long prevGroup, int amount, double basePerUnit) {
         double total = 0.0;
@@ -282,7 +259,7 @@ public class ConfigManager {
             switch (mode) {
                 case ITEM:  eff = materialMult; break;
                 case GROUP: eff = groupMult; break;
-                default:    eff = materialMult * groupMult; break; // STACK
+                default:    eff = materialMult * groupMult; break;
             }
 
             long remaining = amount - k;
@@ -299,7 +276,6 @@ public class ConfigManager {
         return total;
     }
 
-    /** Units remaining until {@code currentCount} reaches {@code nextThreshold}, clamped to {@code remaining}. */
     private long spanTo(long nextThreshold, long currentCount, long remaining) {
         if (nextThreshold == Long.MAX_VALUE) return remaining;
         long span = nextThreshold - currentCount;

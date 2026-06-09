@@ -1,92 +1,23 @@
-# ============================================================
-#  /sellmulti  —  Sell-Multiplier Menu
-# ============================================================
-#
-#  This whole file is yours to edit. Drop more .yml files in this folder to create
-#  additional menus, then open them with:  /pm gui <filename-without-.yml>
-#
-# ------------------------------------------------------------
-#  WINDOW
-# ------------------------------------------------------------
-#  title  : top bar text. Supports &colors, &#RRGGBB hex (1.16+) and %papi% placeholders.
-#  rows   : 1-6 (each row = 9 slots).  (or use `size:` for an exact slot count)
-#  update : true  -> the menu live-refreshes while open, so progress bars / placeholders
-#                    update without re-opening.
-#
-# ------------------------------------------------------------
-#  ICONS  (the `material:` field on any item)
-# ------------------------------------------------------------
-#    WHEAT                 vanilla material (legacy 1.8 names auto-mapped)
-#    nexo:my_id            Nexo custom item
-#    oraxen:my_id          Oraxen custom item
-#    itemsadder:ns:id      ItemsAdder custom item
-#    hdb:1234              HeadDatabase head
-#    player:Notch          player-skinned head
-#    basehead:eyJ0ZXh...   base64-textured head
-#
-# ------------------------------------------------------------
-#  PLACEHOLDERS available in name / lore
-# ------------------------------------------------------------
-#  Any %papi%  placeholder works (requires PlaceholderAPI).
-#  Items with a `group:` (and optionally `tier:`) ALSO get these local tokens,
-#  computed live per-viewer — they work even WITHOUT PlaceholderAPI installed:
-#    {player}              viewer name
-#    {group_name}          pretty group name (e.g. "Crops")
-#    {sold} {sold_short}   total of the group sold (1,234  /  1.2K)
-#    {current_multiplier}  the player's CURRENT group multiplier
-#    {multiplier}          this tier's multiplier (or current, if no tier set)
-#    {threshold} {threshold_short}   this tier's goal (10,000 / 10K)
-#    {remaining} {remaining_short}   units left to reach this tier
-#    {progress_bar}        unicode bar toward this tier
-#    {progress_percent}    0-100
-#    {status}              UNLOCKED / LOCKED (text configured below)
-#
-# ------------------------------------------------------------
-#  CLICK ACTIONS  (per item, under `actions:`)
-# ------------------------------------------------------------
-#  Buckets: left, right, shift_left, shift_right, middle, double, drop, number_key,
-#           and `any` / `click` (runs on every click).
-#  Action tags:
-#    [message] <text>          send a chat message to the clicker
-#    [broadcast] <text>        broadcast to the whole server
-#    [console] <command>       run a command from console (use %player_name%)
-#    [player] <command>        make the player run a command
-#    [open] <menu>             open another menu in this folder
-#    [close]                   close the menu
-#    [sound] <SOUND> [vol] [pitch]
-#    [refresh]                 re-render this menu in place
-#  Lines support {tokens} and %papi% too.
-# ============================================================
-
 title: "&8» &2&lSell Multipliers"
 rows: 3
 update: true
 
-# Text used by the {status} token on tier items.
 status-unlocked: "&a&lUNLOCKED &a✔"
 status-locked: "&c&lLOCKED &7(keep selling!)"
 
-# Appearance of the {progress_bar} token.
 progress-bar:
   length: 20
   symbol: "▉"
   complete: "&a"
   incomplete: "&7"
 
-# ------------------------------------------------------------
-#  Filler — fills every empty slot. Set enabled:false to leave gaps.
-# ------------------------------------------------------------
 filler:
   enabled: true
   material: GRAY_STAINED_GLASS_PANE
   name: " "
 
-# ------------------------------------------------------------
-#  Items
-# ------------------------------------------------------------
 items:
 
-  # Live status head at the top — shows the player's current crop progress.
   info:
     material: "player:{player}"
     slot: 4
@@ -103,7 +34,6 @@ items:
       any:
         - "[sound] UI_BUTTON_CLICK 1 1.2"
 
-  # ---- 1.1x : sell 10K crops --------------------------------
   tier-1:
     material: GRASS_BLOCK
     slot: 11
@@ -126,7 +56,6 @@ items:
       right:
         - "[message] &7Sell crops at any &e/shop &7to make progress."
 
-  # ---- 1.2x : sell 100K crops -------------------------------
   tier-2:
     material: WHEAT
     slot: 13
@@ -147,7 +76,6 @@ items:
         - "[message] &7You are working toward the &e1.2x &7crop multiplier!"
         - "[sound] ENTITY_EXPERIENCE_ORB_PICKUP 1 1"
 
-  # ---- 1.3x : sell 1M crops ---------------------------------
   tier-3:
     material: KELP
     slot: 15
@@ -168,7 +96,6 @@ items:
         - "[message] &7You are working toward the &b1.3x &7crop multiplier!"
         - "[sound] ENTITY_EXPERIENCE_ORB_PICKUP 1 1"
 
-  # Close button.
   close:
     material: BARRIER
     slot: 22

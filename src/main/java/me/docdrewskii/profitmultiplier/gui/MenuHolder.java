@@ -8,14 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * Marker {@link InventoryHolder} used to recognise our own menus inside inventory events
- * and to carry the menu + viewer identity, the current page, and the click map produced
- * by the most recent render.
- */
 public class MenuHolder implements InventoryHolder {
 
-    /** What a click on a given slot should do, captured at render time. */
     public static final class ClickContext {
         final MenuItem item;
         final Map<String, String> tokens;

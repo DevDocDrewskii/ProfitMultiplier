@@ -110,7 +110,6 @@ public class PlayerDataManager {
         return total;
     }
 
-    /** Sum of the player's sold-totals across every material in the given collection. */
     public long getGroupSold(UUID uuid, java.util.Collection<Material> materials) {
         Map<Material, Long> m = sold.get(uuid);
         if (m == null) return 0L;

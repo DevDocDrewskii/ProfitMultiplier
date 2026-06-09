@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-/** Runs the parsed {@link MenuAction}s produced when a menu item is clicked. */
 public class ActionExecutor {
 
     private final ProfitMultiplier plugin;
@@ -70,18 +69,16 @@ public class ActionExecutor {
         }
     }
 
-    /** Expand tokens + PAPI for a command/argument string, but never apply color codes. */
     private String command(Player player, String raw, Map<String, String> tokens) {
         String out = TextUtil.tokens(raw, tokens);
         out = TextUtil.papi(player, out);
-        // A leading slash from copy/paste would break dispatchCommand/performCommand.
+
         if (out.startsWith("/")) out = out.substring(1);
         return out;
     }
 
     private void openLater(Player player, String menuName) {
-        // Defer to the next tick so we are not opening a new inventory from inside the
-        // InventoryClickEvent of the current one.
+
         Bukkit.getScheduler().runTask(plugin, () -> plugin.getMenuManager().open(player, menuName));
     }
 
@@ -100,7 +97,7 @@ public class ActionExecutor {
             Sound sound = Sound.valueOf(parts[0].toUpperCase(Locale.ROOT));
             player.playSound(player.getLocation(), sound, volume, pitch);
         } catch (IllegalArgumentException ex) {
-            // Modern servers accept namespaced keys (e.g. "minecraft:ui.button.click").
+
             try {
                 player.playSound(player.getLocation(), parts[0].toLowerCase(Locale.ROOT), volume, pitch);
             } catch (Throwable ignored) {

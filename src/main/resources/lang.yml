@@ -1,47 +1,19 @@
-# ============================================================
-#  ProfitMultiplier — Language / Messages
-# ============================================================
-#
-# Every message has two parts:
-#   enabled: true|false   -> master toggle for this message
-#   message: "..."        -> the text shown
-#
-# A message is ONLY sent when:
-#   * enabled is true, AND
-#   * the message string exists and is not empty.
-# So you can silence any message by setting enabled: false OR by
-# clearing/removing its 'message' value.
-#
-# Color codes use '&'. {prefix} inserts the prefix below.
-# Placeholders available per-message are listed in comments.
-
 prefix: "&8[&6ProfitMultiplier&8]&r "
 
 messages:
 
-  # Shown to a player when a sale is boosted by a multiplier.
-  # {base} {final} {bonus} are already currency-formatted (symbol included), so don't
-  # add your own $ here. {currency} is the bare symbol if you want it.
-  # Placeholders: {amount} {item} {base} {final} {bonus} {currency} {multiplier} {total}
   multiplier-applied:
     enabled: true
     message: "{prefix}&fSold &e{amount}x {item} &ffor &a{final} &7(+&a{bonus}&7, &b{multiplier}x&7) &8| &7Total sold: &f{total}"
 
-  # Shown when a sale pushes the player into a NEW multiplier tier.
-  # Placeholders: {item} {total} {multiplier} {threshold}
   threshold-reached:
     enabled: true
     message: "{prefix}&6&lMILESTONE! &fYou've sold &e{total}x {item} &fand unlocked a &b{multiplier}x &fsell multiplier!"
 
-  # Shown when a sale pushes the player into a new GROUP tier (e.g. crops).
-  # Placeholders: {group} {total} {multiplier} {threshold}
   group-threshold-reached:
     enabled: true
     message: "{prefix}&6&lMILESTONE! &fYou've sold &e{total} {group} &fand unlocked a &b{multiplier}x &fsell multiplier on all {group}!"
 
-  # Used by the %profitmultiplier_bonus_last_display% placeholder.
-  # Returns empty when there is no bonus on the last sale.
-  # Placeholders: {bonus}
   bonus-display:
     enabled: true
     message: " &7(+&a${bonus} &7bonus)"
@@ -54,32 +26,26 @@ messages:
     enabled: true
     message: "{prefix}&aConfig and language files reloaded."
 
-  # Placeholders: {player}
   reset-player:
     enabled: true
     message: "{prefix}&aReset sold-totals for &e{player}&a."
 
-  # Placeholders: {player}
   reset-player-none:
     enabled: true
     message: "{prefix}&eNo tracked sales found for &f{player}&e."
 
-  # Placeholders: {count}
   reset-all:
     enabled: true
     message: "{prefix}&aReset sold-totals for &e{count}&a player(s)."
 
-  # Placeholders: {player}
   stats-header:
     enabled: true
     message: "&6&lSell progression &7— &f{player}"
 
-  # Placeholders: {item} {sold} {multiplier}
   stats-line:
     enabled: true
     message: "&7- &f{item}&7: &e{sold} &7sold &8| &7multiplier: {multiplier}"
 
-  # Placeholders: {player}
   stats-none:
     enabled: true
     message: "{prefix}&eNo tracked sales for &f{player}&e."
@@ -96,17 +62,14 @@ messages:
     enabled: true
     message: "{prefix}&cUnknown sub-command. Use /pm help."
 
-  # Placeholders: {menu}
   menu-unknown:
     enabled: true
     message: "{prefix}&cNo menu named &f{menu}&c. Check plugins/ProfitMultiplier/menus/."
 
-  # Placeholders: {player} {menu}
   menu-opened-other:
     enabled: true
     message: "{prefix}&aOpened menu &f{menu} &afor &e{player}&a."
 
-  # Placeholders: {player}
   player-not-online:
     enabled: true
     message: "{prefix}&cPlayer &f{player} &cis not online."

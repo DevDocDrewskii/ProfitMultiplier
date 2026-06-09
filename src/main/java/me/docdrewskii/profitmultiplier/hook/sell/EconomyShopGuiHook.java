@@ -8,12 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-/**
- * EconomyShopGUI (free & Premium) integration via its {@code PreTransactionEvent}.
- *
- * This hook references EconomyShopGUI API classes directly, so it is only ever instantiated
- * when EconomyShopGUI is installed (guarded by {@link SellHookManager}).
- */
 public class EconomyShopGuiHook implements SellHook, Listener {
 
     private final ProfitMultiplier plugin;

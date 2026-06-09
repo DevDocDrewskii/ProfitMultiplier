@@ -2,10 +2,6 @@ package me.docdrewskii.profitmultiplier.gui;
 
 import java.util.Locale;
 
-/**
- * One parsed action line, e.g. {@code [console] eco give %player_name% 100}.
- * Parsing happens once at config load; execution happens per click.
- */
 public class MenuAction {
 
     public enum Type {
@@ -38,11 +34,6 @@ public class MenuAction {
         return argument;
     }
 
-    /**
-     * Parse a single action line. A line missing a recognised {@code [tag]} is treated as a
-     * chat message so admins can write plain text without ceremony. Returns {@code null} for
-     * blank lines.
-     */
     public static MenuAction parse(String line) {
         if (line == null) return null;
         String trimmed = line.trim();

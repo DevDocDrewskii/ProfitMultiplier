@@ -8,14 +8,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 
-/**
- * UltimateShop integration via {@code cn.superiormc.ultimateshop.api.ItemPreTransactionEvent}.
- *
- * UltimateShop rewards aren't a single price — they're a {@code GiveResult} holding a map of
- * reward "things" with BigDecimal amounts, plus a {@code setMultiplier(double)} that scales
- * them all. So we read the original reward total, run it through {@link SellProcessor} (which
- * does all the tracking/messaging), derive the effective factor, and scale the reward by it.
- */
 public class UltimateShopHook extends ReflectiveSellHook {
 
     public UltimateShopHook(ProfitMultiplier plugin, SellProcessor processor) {
@@ -34,7 +26,7 @@ public class UltimateShopHook extends ReflectiveSellHook {
 
     @Override
     protected void handleEvent(Event event) throws Exception {
-        // isBuyOrSell(): true = buy, false = sell.
+
         Object buy = call(event, "isBuyOrSell");
         if (!(buy instanceof Boolean) || (Boolean) buy) return;
 
@@ -58,17 +50,16 @@ public class UltimateShopHook extends ReflectiveSellHook {
         double newTotal = processor.process(player, material, amount, originalTotal);
         if (newTotal > originalTotal) {
             double factor = newTotal / originalTotal;
-            // GiveResult.setMultiplier(double) scales every reward amount uniformly.
+
             call(giveResult, "setMultiplier", factor);
         }
     }
 
-    /** The product's display item gives us a representative Bukkit Material. */
     private Material resolveMaterial(Object event, Player player) {
         try {
             Object item = call(event, "getItem");
             if (item == null) return null;
-            // ObjectItem#getDisplayItem(Player) -> ItemStack
+
             Object display = call(item, "getDisplayItem", player);
             if (display instanceof ItemStack) {
                 return ((ItemStack) display).getType();
@@ -78,7 +69,6 @@ public class UltimateShopHook extends ReflectiveSellHook {
         return null;
     }
 
-    /** Sum of the BigDecimal reward amounts in GiveResult#getResultMap(). */
     private double sumRewardMap(Object giveResult) {
         try {
             Object map = call(giveResult, "getResultMap");

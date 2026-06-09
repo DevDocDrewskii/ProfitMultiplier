@@ -5,11 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-/**
- * zShop (Maxlego08) integration via
- * {@code fr.maxlego08.zshop.api.event.events.ZShopSellEvent} and {@code ...ZShopSellAllEvent}
- * (getPlayer / getItemButton / getAmount / getPrice / setPrice).
- */
 public class ZShopHook extends PriceEventSellHook {
 
     public ZShopHook(ProfitMultiplier plugin, SellProcessor processor) {
@@ -31,7 +26,7 @@ public class ZShopHook extends PriceEventSellHook {
 
     @Override
     protected boolean isSell(Object event) {
-        return true; // both registered events are sells
+        return true;
     }
 
     @Override
@@ -46,7 +41,7 @@ public class ZShopHook extends PriceEventSellHook {
         if (itemButton == null) return null;
         ItemStack stack = tryItemStack(itemButton, "getItemStack", "getItem", "getCustomItemStack", "build");
         if (stack != null) return stack.getType();
-        // Fallback: some buttons expose the Material directly.
+
         try {
             Object material = call(itemButton, "getMaterial");
             if (material instanceof Material) return (Material) material;

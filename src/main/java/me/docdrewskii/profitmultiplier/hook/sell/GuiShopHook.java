@@ -24,16 +24,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * GUIShop integration via its {@code DynamicPriceProvider} SPI (registered through Bukkit's
- * ServicesManager). We supply a reflective proxy so we don't compile against GUIShop.
- *
- * GUIShop's pricing API is PLAYER-LESS — {@code calculateSellPrice}/{@code sellItem} receive
- * only an item id, quantity and the static prices. ProfitMultiplier's multipliers are
- * per-player, so we recover the acting player from GUIShop's own inventory interactions
- * (the click that triggers a sell sets the context immediately before GUIShop prices it).
- * When no player context is known, we return the static price unchanged (safe no-op).
- */
 public class GuiShopHook implements SellHook, InvocationHandler, Listener {
 
     private static final class Quote {
@@ -88,8 +78,6 @@ public class GuiShopHook implements SellHook, InvocationHandler, Listener {
         }
     }
 
-    // ----- DynamicPriceProvider proxy -----
-
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
         String name = method.getName();
@@ -98,7 +86,7 @@ public class GuiShopHook implements SellHook, InvocationHandler, Listener {
                 case "calculateSellPrice":
                     return calculateSellPrice(args);
                 case "calculateBuyPrice":
-                    // Leave buy prices untouched: args = (item, quantity, staticBuy, staticSell)
+
                     return args[2];
                 case "sellItem":
                     onSold(args);
@@ -112,14 +100,14 @@ public class GuiShopHook implements SellHook, InvocationHandler, Listener {
                 case "equals":
                     return proxy == args[0];
                 default:
-                    // Unknown future method: don't break GUIShop — echo the static price if any.
+
                     return (args != null && args.length >= 3 && args[2] instanceof BigDecimal) ? args[2] : null;
             }
         } catch (Throwable t) {
             if (plugin.getConfigManager().isDebug()) {
                 plugin.getLogger().warning("[GUIShop] " + name + " error: " + t);
             }
-            // On any failure, fall back to the static price so GUIShop keeps working.
+
             return (args != null && args.length >= 4 && args[3] instanceof BigDecimal) ? args[3] : null;
         }
     }
@@ -138,7 +126,7 @@ public class GuiShopHook implements SellHook, InvocationHandler, Listener {
 
         double base = staticSell.doubleValue();
         double boosted = processor.quoteBoostedPrice(player, material, quantity, base);
-        // Cache so the matching sellItem() can record bonus/messages with the real prices.
+
         quotes.put(player.getUniqueId(), new Quote(material, quantity, base, boosted));
         return boosted > base ? BigDecimal.valueOf(boosted) : staticSell;
     }
@@ -155,7 +143,7 @@ public class GuiShopHook implements SellHook, InvocationHandler, Listener {
         if (quote != null && quote.material == material && quote.amount == quantity) {
             record = () -> processor.recordSale(player, material, quantity, quote.base, quote.boosted);
         } else {
-            // No matching quote — still advance progression (no money message).
+
             record = () -> processor.recordSale(player, material, quantity, 0.0, 0.0);
         }
         if (Bukkit.isPrimaryThread()) {
@@ -169,8 +157,6 @@ public class GuiShopHook implements SellHook, InvocationHandler, Listener {
         UUID id = currentSeller;
         return id == null ? null : Bukkit.getPlayer(id);
     }
-
-    // ----- player-context capture from GUIShop's own inventories -----
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onOpen(InventoryOpenEvent event) {

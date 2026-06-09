@@ -5,7 +5,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Method;
 
-/** Reflective bridge to Oraxen's {@code OraxenItems} API. */
 public final class OraxenHook {
 
     private static Boolean available;

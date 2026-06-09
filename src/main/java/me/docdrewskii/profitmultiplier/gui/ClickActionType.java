@@ -4,10 +4,6 @@ import org.bukkit.event.inventory.ClickType;
 
 import java.util.Locale;
 
-/**
- * The click "buckets" a menu item can react to. {@link #ANY} always runs in addition to
- * the specific bucket, so an admin can define shared behaviour once and per-click extras.
- */
 public enum ClickActionType {
 
     ANY,
@@ -20,7 +16,6 @@ public enum ClickActionType {
     DROP,
     NUMBER_KEY;
 
-    /** Resolve a config key (e.g. "shift_left", "click", "all") into a bucket, or {@code null}. */
     public static ClickActionType fromKey(String key) {
         if (key == null) return null;
         String k = key.trim().toLowerCase(Locale.ROOT).replace('-', '_').replace(' ', '_');
@@ -61,7 +56,6 @@ public enum ClickActionType {
         }
     }
 
-    /** Map a live Bukkit {@link ClickType} to the specific bucket it belongs to. */
     public static ClickActionType fromBukkit(ClickType type) {
         switch (type) {
             case LEFT:

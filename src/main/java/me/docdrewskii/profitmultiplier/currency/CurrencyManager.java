@@ -7,10 +7,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * Loads the {@code currency:} section and resolves named currencies for message display.
- * Falls back to a sensible "$" default when nothing is configured.
- */
 public class CurrencyManager {
 
     private final ProfitMultiplier plugin;
@@ -51,7 +47,6 @@ public class CurrencyManager {
         return new Currency(name, symbol, suffix, pattern);
     }
 
-    /** Resolve a currency by name, falling back to the default for null/unknown names. */
     public Currency get(String name) {
         if (name == null) return defaultCurrency;
         Currency c = currencies.get(name.toLowerCase(Locale.ROOT));

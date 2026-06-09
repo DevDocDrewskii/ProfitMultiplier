@@ -5,7 +5,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Method;
 
-/** Reflective bridge to ItemsAdder's {@code CustomStack} API. */
 public final class ItemsAdderHook {
 
     private static Boolean available;
@@ -33,7 +32,6 @@ public final class ItemsAdderHook {
         }
     }
 
-    /** @param namespacedId e.g. {@code myitems:ruby} */
     public static ItemStack get(String namespacedId) {
         if (!isAvailable()) return null;
         try {

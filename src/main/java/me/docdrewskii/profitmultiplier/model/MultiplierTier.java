@@ -4,7 +4,7 @@ public class MultiplierTier {
 
     private final int threshold;
     private final double multiplier;
-    /** Optional icon string (any ItemResolver form) for menus that list tiers. May be null. */
+
     private final String icon;
 
     public MultiplierTier(int threshold, double multiplier) {

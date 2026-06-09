@@ -92,7 +92,6 @@ public class ProfitPlaceholders extends PlaceholderExpansion {
             return next == Long.MAX_VALUE ? "0" : String.valueOf(next - soldAmt);
         }
 
-        // --- Group placeholders: %profitmultiplier_group_<field>_<groupname>% ---
         if (key.startsWith("group_sold_")) {
             ItemGroup g = cfg.getGroup(params.substring("group_sold_".length()));
             return g == null ? "0" : String.valueOf(pdm.getGroupSold(id, g.getMaterials()));

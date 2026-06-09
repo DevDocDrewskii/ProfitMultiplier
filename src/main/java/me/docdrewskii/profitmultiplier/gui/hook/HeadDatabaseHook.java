@@ -5,13 +5,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Method;
 
-/**
- * Reflective bridge to HeadDatabase's {@code HeadDatabaseAPI}.
- *
- * The API instance is created lazily on first use — HeadDatabase populates its head
- * cache during its own enable, so deferring construction avoids race conditions with
- * plugin load order.
- */
 public final class HeadDatabaseHook {
 
     private static Boolean available;
@@ -39,7 +32,6 @@ public final class HeadDatabaseHook {
         }
     }
 
-    /** @param id the HeadDatabase head id (numeric string). */
     public static ItemStack get(String id) {
         if (!isAvailable()) return null;
         try {

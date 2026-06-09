@@ -34,7 +34,6 @@ public class ProfitCommand implements TabExecutor {
         LangManager lang = plugin.getLang();
         PlayerDataManager data = plugin.getDataManager();
 
-        // `/sellmulti` (alias) with no args opens the GUI straight away.
         if (args.length == 0) {
             if (label.equalsIgnoreCase("sellmulti")) {
                 openOwn(sender, "sellmulti");
@@ -89,7 +88,6 @@ public class ProfitCommand implements TabExecutor {
         }
     }
 
-    /** Open a menu for yourself: {@code /pm gui [menu]} or, for staff, {@code /pm gui <menu> <player>}. */
     private void handleGui(CommandSender sender, String[] args) {
         String menuName = args.length >= 2 ? args[1] : "sellmulti";
 

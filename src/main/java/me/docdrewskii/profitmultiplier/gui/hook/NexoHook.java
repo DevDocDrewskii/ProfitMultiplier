@@ -5,10 +5,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Method;
 
-/**
- * Reflective bridge to Nexo's item API. Reflection (rather than a compile dependency)
- * keeps the plugin a single jar with zero hard requirement on Nexo being present.
- */
 public final class NexoHook {
 
     private static Boolean available;
@@ -35,7 +31,6 @@ public final class NexoHook {
         }
     }
 
-    /** @return the built ItemStack for the given Nexo id, or {@code null} if unknown/unavailable. */
     public static ItemStack get(String id) {
         if (!isAvailable()) return null;
         try {

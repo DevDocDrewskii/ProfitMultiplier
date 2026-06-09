@@ -10,21 +10,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;
 
-/**
- * Turns a config "icon string" into an ItemStack. Supported forms:
- *
- *   STONE                     vanilla material (legacy names auto-mapped)
- *   material:STONE            explicit vanilla material
- *   nexo:my_id                Nexo custom item
- *   oraxen:my_id              Oraxen custom item
- *   itemsadder:ns:id          ItemsAdder custom item
- *   hdb:1234                  HeadDatabase head (alias: headdatabase:)
- *   player:Notch              player-skinned head (alias: playerhead:)
- *   basehead:eyJ0ZXh0...      base64-textured head (alias: head:)
- *
- * Unknown / unavailable sources fall back to a barrier (or stone on very old servers)
- * so a mistyped icon is visible in-game rather than silently absent.
- */
 public final class ItemResolver {
 
     private ItemResolver() {
@@ -69,7 +54,7 @@ public final class ItemResolver {
                 case "base64":
                     return SkullUtil.fromBase64(arg);
                 default:
-                    // Unknown prefix — fall through and try the whole string as a material.
+
                     break;
             }
         }

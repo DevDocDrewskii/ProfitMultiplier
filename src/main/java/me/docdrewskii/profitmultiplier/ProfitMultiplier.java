@@ -55,8 +55,6 @@ public class ProfitMultiplier extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new MenuListener(this), this);
 
-        // Keep any open live-updating menus (update: true) refreshed so progress bars and
-        // placeholders stay current without the player re-opening the GUI.
         getServer().getScheduler().runTaskTimer(this, () -> menuManager.refreshOpenMenus(),
                 MENU_REFRESH_TICKS, MENU_REFRESH_TICKS);
 

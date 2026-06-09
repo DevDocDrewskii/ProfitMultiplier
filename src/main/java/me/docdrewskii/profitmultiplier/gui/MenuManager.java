@@ -30,7 +30,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-/** Loads menu definitions, renders them per-viewer, and keeps open menus refreshed. */
 public class MenuManager {
 
     private final ProfitMultiplier plugin;
@@ -46,17 +45,13 @@ public class MenuManager {
         return actionExecutor;
     }
 
-    // ---------------------------------------------------------------------
-    //  Loading
-    // ---------------------------------------------------------------------
-
     public void loadAll() {
         menus.clear();
         File folder = new File(plugin.getDataFolder(), "menus");
         if (!folder.exists()) {
             folder.mkdirs();
         }
-        // Ship the default menu on first run.
+
         File defaultMenu = new File(folder, "sellmulti.yml");
         if (!defaultMenu.exists()) {
             plugin.saveResource("menus/sellmulti.yml", false);
@@ -118,7 +113,6 @@ public class MenuManager {
             }
         }
 
-        // Pagination: a dynamic content area.
         List<Integer> contentSlots = readSlotList(yml.getList("content-slots", new ArrayList<>()));
         String contentSource = yml.getString("content-source", null);
         MenuItem contentTemplate = null;
@@ -189,7 +183,6 @@ public class MenuManager {
         return slots;
     }
 
-    /** Parse a list whose entries are slot ints or "from-to" range strings (e.g. "10-16"). */
     private List<Integer> readSlotList(List<?> rawList) {
         List<Integer> slots = new ArrayList<>();
         if (rawList == null) return slots;
@@ -217,7 +210,6 @@ public class MenuManager {
         Map<ClickActionType, List<MenuAction>> map = MenuItem.emptyActions();
         if (itemSec == null) return map;
 
-        // Shorthand: a flat list under "actions" maps to the ANY bucket.
         if (itemSec.isList("actions")) {
             addActions(map, ClickActionType.ANY, itemSec.getStringList("actions"));
             return map;
@@ -242,10 +234,6 @@ public class MenuManager {
             if (action != null) parsed.add(action);
         }
     }
-
-    // ---------------------------------------------------------------------
-    //  Opening / rendering
-    // ---------------------------------------------------------------------
 
     public boolean open(Player player, String menuName) {
         Menu menu = getMenu(menuName);
@@ -273,7 +261,6 @@ public class MenuManager {
         return true;
     }
 
-    /** Re-render the menu the player currently has open (no flicker; no re-open). */
     public void refresh(Player player) {
         InventoryHolder holder = player.getOpenInventory().getTopInventory().getHolder();
         if (holder instanceof MenuHolder) {
@@ -291,7 +278,6 @@ public class MenuManager {
         changePage(player, -1, -1);
     }
 
-    /** @param oneBasedPage page number as shown to players (1 = first). */
     public void gotoPage(Player player, int oneBasedPage) {
         changePage(player, 0, oneBasedPage - 1);
     }
@@ -302,12 +288,11 @@ public class MenuManager {
         MenuHolder mh = (MenuHolder) holder;
         int target = absoluteZeroBased >= 0 ? absoluteZeroBased : mh.getPage() + delta;
         mh.setPage(Math.max(0, target));
-        // renderContents clamps the page to the real page count for the current data.
+
         renderContents(player, mh.getMenu(), mh.getInventory());
         player.updateInventory();
     }
 
-    /** Tick task: refresh every open menu flagged {@code update: true}. */
     public void refreshOpenMenus() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             InventoryHolder holder = player.getOpenInventory().getTopInventory().getHolder();
@@ -326,7 +311,6 @@ public class MenuManager {
         MenuHolder holder = (inv.getHolder() instanceof MenuHolder) ? (MenuHolder) inv.getHolder() : null;
         if (holder != null) holder.clearClicks();
 
-        // --- Resolve pagination state ---
         List<Map<String, String>> entries = menu.isPaginated()
                 ? buildDynamicEntries(player, menu)
                 : Collections.<Map<String, String>>emptyList();
@@ -350,7 +334,6 @@ public class MenuManager {
         boolean firstPage = page == 0;
         boolean lastPage = page >= totalPages - 1;
 
-        // --- Static items (shown on every page) ---
         for (MenuItem item : menu.getItems()) {
             if (item.getViewPermission() != null && !player.hasPermission(item.getViewPermission())) continue;
             if (item.isHideOnFirstPage() && firstPage) continue;
@@ -367,7 +350,6 @@ public class MenuManager {
             }
         }
 
-        // --- Dynamic entries for the current page ---
         if (menu.isPaginated() && perPage > 0) {
             MenuItem template = menu.getContentTemplate();
             int start = page * perPage;
@@ -385,7 +367,6 @@ public class MenuManager {
             }
         }
 
-        // --- Filler fills whatever is still empty ---
         MenuItem filler = menu.getFiller();
         if (filler != null) {
             Map<String, String> tokens = new HashMap<>();
@@ -425,10 +406,6 @@ public class MenuManager {
         return stack;
     }
 
-    // ---------------------------------------------------------------------
-    //  Per-item placeholder tokens (group / tier progress)
-    // ---------------------------------------------------------------------
-
     private Map<String, String> computeTokens(Player player, Menu menu, MenuItem item) {
         if (item.getGroup() != null) {
             ItemGroup group = plugin.getConfigManager().getGroup(item.getGroup());
@@ -441,10 +418,6 @@ public class MenuManager {
         return t;
     }
 
-    /**
-     * The full token set for one (group, tier) pair. {@code tierThreshold < 0} means "no
-     * specific tier" — progress is reported toward the player's NEXT threshold instead.
-     */
     private Map<String, String> computeGroupTokens(Player player, Menu menu, ItemGroup group, long tierThreshold) {
         ConfigManager cfg = plugin.getConfigManager();
         PlayerDataManager pdm = plugin.getDataManager();
@@ -498,11 +471,6 @@ public class MenuManager {
         return t;
     }
 
-    /**
-     * Produce one token-map per dynamic entry, driven by {@code content-source}:
-     *   groups                       one entry per configured group
-     *   tiers:<group>                one entry per tier of that group
-     */
     private List<Map<String, String>> buildDynamicEntries(Player player, Menu menu) {
         List<Map<String, String>> entries = new ArrayList<>();
         ConfigManager cfg = plugin.getConfigManager();
@@ -563,16 +531,12 @@ public class MenuManager {
                 menu.getBarComplete(), menu.getBarIncomplete());
     }
 
-    // ---------------------------------------------------------------------
-    //  Item-meta helpers (version-tolerant)
-    // ---------------------------------------------------------------------
-
     private void applyModelData(ItemMeta meta, int cmd) {
         if (cmd < 0) return;
         try {
             meta.setCustomModelData(cmd);
         } catch (Throwable ignored) {
-            // Pre-1.14 server — custom model data unsupported; silently ignore.
+
         }
     }
 
@@ -609,10 +573,6 @@ public class MenuManager {
         }
         return ench;
     }
-
-    // ---------------------------------------------------------------------
-    //  Accessors
-    // ---------------------------------------------------------------------
 
     public Menu getMenu(String name) {
         return name == null ? null : menus.get(name.toLowerCase(Locale.ROOT));

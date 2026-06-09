@@ -1,30 +1,3 @@
-# ============================================================
-#  ProfitMultiplier Configuration
-#  Cumulative sell-progression multiplier for your shop plugins
-# ============================================================
-#
-# HOW IT WORKS
-#   The plugin tracks how many of each item every player has sold over time.
-#   As a player's TOTAL sold of an item crosses a threshold, their sell
-#   multiplier for that item goes up — and stays up for every future sale until
-#   the next threshold upgrades it again.
-#
-#   The boost is applied PER ITEM. When a single sale crosses a threshold, only
-#   the units at/after the threshold are boosted (the rest sell at the old rate).
-#
-# EXAMPLE (DIAMOND below):
-#   Once a player has sold 20 diamonds total, each further diamond sells at 1.1x.
-#   At 50 total it climbs to 1.25x, and at 100 total it reaches 1.5x.
-
-# ------------------------------------------------------------
-# Shop hooks — the plugin auto-detects and hooks every supported shop it finds.
-# Set one to false to skip it. Keys are the exact plugin names.
-#   Supported: EconomyShopGUI (+ Premium), ShopGUIPlus, zShop, UltimateShop, GUIShop
-#
-# NOTE on GUIShop: its pricing API has no player context, so ProfitMultiplier recovers
-# the seller from GUIShop's own shop GUI. This is reliable for selling THROUGH the GUI;
-# player-less paths (e.g. command sells) safely fall back to the un-boosted price.
-# ------------------------------------------------------------
 hooks:
   EconomyShopGUI: true
   ShopGUIPlus: true
@@ -32,17 +5,6 @@ hooks:
   UltimateShop: true
   GUIShop: true
 
-# ------------------------------------------------------------
-# Currencies — DISPLAY formatting only.
-#
-# ProfitMultiplier never moves money; it scales the price the shop transaction
-# already uses, so the multiplier works with ANY currency the shop pays in
-# (Vault, PlayerPoints, tokens, gems...). This section just controls how amounts
-# are shown in messages/placeholders. Assign a currency to a group with
-# `currency: <name>` (see the groups below) to label that group's payouts.
-#
-#   position: PREFIX -> "$1,234"   |   SUFFIX -> "1,234 gems"
-# ------------------------------------------------------------
 currency:
   symbol: "$"
   position: PREFIX
@@ -57,12 +19,6 @@ currency:
       position: PREFIX
       format: "#,##0"
 
-# ------------------------------------------------------------
-# Per-item progression ladders.
-# The HIGHEST tier whose threshold the player has reached is applied.
-# Material names must match the Bukkit Material enum (DIAMOND, GOLD_INGOT, ...).
-# Legacy (1.8) and modern (1.13+) names are both accepted automatically.
-# ------------------------------------------------------------
 items:
   DIAMOND:
     tiers:
@@ -85,57 +41,13 @@ items:
       - threshold: 128
         multiplier: 1.2
 
-# ------------------------------------------------------------
-# Groups — a SHARED cumulative ladder across many materials.
-#
-# Every material in a group feeds ONE counter. As the player's combined total of
-# all member materials crosses a threshold, the group's multiplier goes up and is
-# applied to every member when sold. This is what powers the /sellmulti "crops" menu:
-# selling wheat, carrots, kelp, etc. all advance the same crop progress.
-#
-# >>> MAKE YOUR OWN GROUPS <<<
-# Add as many groups as you like — just copy the block below and rename it. Each group
-# you define is INSTANTLY available everywhere:
-#   * its own PlaceholderAPI placeholders (swap "crops" for your group name)
-#   * a slot in any paginated "content-source: groups" menu (see menus/groups.yml)
-#   * the /sellmulti menu (point a menu item's `group:` at it)
-#
-# Per-group options:
-#   materials:    items that count toward the shared counter (legacy 1.8 names ok)
-#   tiers:        threshold -> multiplier ladder (each tier may add an optional `icon:`)
-#   icon:         (optional) menu icon for this group — any ItemResolver form
-#                 (MATERIAL, nexo:id, oraxen:id, itemsadder:ns:id, hdb:1234, player:Name, basehead:...)
-#   display-name: (optional) pretty name shown by {group_name} / %..._group_display_<g>%
-#   currency:     (optional) a currency name from the `currency:` section above, used to
-#                 format this group's payouts in messages (display only)
-#   stack-mode:   how the group multiplier combines with a material's OWN multiplier
-#                 (its items: ladder or the default: ladder) when a material has both:
-#                   group  -> group multiplier wins, material ignored   (DEFAULT)
-#                   item   -> material multiplier wins, group ignored
-#                   stack  -> BOTH apply, multiplied together (item 1.5x * group 1.2x = 1.8x)
-#                 (If a material only belongs to a group, all three behave the same.)
-#
-# Precedence when a material qualifies for more than one ladder (when NOT stacking):
-#   items: (per-item)  >  groups:  >  default:
-#
-# Placeholders (need PlaceholderAPI) — replace "crops" with any group name:
-#   %profitmultiplier_group_sold_crops%
-#   %profitmultiplier_group_multiplier_crops%
-#   %profitmultiplier_group_next_threshold_crops%
-#   %profitmultiplier_group_remaining_crops%
-#   %profitmultiplier_group_active_threshold_crops%
-#   %profitmultiplier_group_progress_crops%        (0-100, % toward next tier)
-#   %profitmultiplier_group_max_multiplier_crops%  (highest tier multiplier)
-#   %profitmultiplier_group_tier_count_crops%      (number of tiers)
-#   %profitmultiplier_group_display_crops%         (display-name, or the group name)
-# ------------------------------------------------------------
 groups:
   crops:
     icon: GRASS_BLOCK
     display-name: "Crops"
-    # Crops aren't in any items: ladder, so this only matters if you add them to one.
+
     stack-mode: group
-    # currency: gems   # uncomment to show crop payouts as "1,234 gems"
+
     materials:
       - WHEAT
       - CARROT
@@ -164,9 +76,6 @@ groups:
         multiplier: 1.3
         icon: KELP
 
-  # ---- Example custom group — delete or edit freely. ----
-  # Demonstrates a custom group + a custom currency. Browsable in menus/groups.yml and
-  # exposed as %profitmultiplier_group_*_mob_drops%. Payout messages show "1,234 ⛁".
   mob_drops:
     icon: ROTTEN_FLESH
     display-name: "Mob Drops"
@@ -191,10 +100,6 @@ groups:
         multiplier: 1.5
         icon: BLAZE_ROD
 
-  # ---- STACKING demo — these ores ALSO have items: ladders above. ----
-  # stack-mode: stack means a diamond sale gets BOTH its per-item multiplier AND this
-  # group's multiplier multiplied together. Sell 5,000 ores total -> group adds 1.1x on
-  # top of whatever the DIAMOND/GOLD_INGOT/IRON_INGOT item ladder already gives.
   ores:
     icon: DIAMOND
     display-name: "Ores"
@@ -219,33 +124,23 @@ groups:
         multiplier: 1.3
         icon: DIAMOND
 
-# ------------------------------------------------------------
-# Default ladder — applies to ALL items NOT listed above.
-# ------------------------------------------------------------
 default:
-  # false = unlisted items never get a multiplier.
+
   enabled: true
-  # Cumulative amount of an unlisted item a player must sell to unlock the boost.
+
   threshold: 1000
-  # Multiplier applied once the threshold is reached.
+
   multiplier: 1.1
-  # Items that NEVER receive the default multiplier, even when default is enabled.
+
   blacklist:
     - BEDROCK
     - BARRIER
     - COMMAND_BLOCK
     - STRUCTURE_BLOCK
 
-# ------------------------------------------------------------
-# Periodic auto-reset — wipes EVERY player's sold-totals on a schedule,
-# resetting all progression back to zero.
-# ------------------------------------------------------------
 auto-reset:
   enabled: false
-  # Accepts: HOURLY, DAILY, WEEKLY, MONTHLY, or a plain number of hours (e.g. 72).
+
   interval: WEEKLY
 
-# Player-facing messages live in lang.yml (each is individually toggleable).
-
-# Log every multiplier application to console.
 debug: false

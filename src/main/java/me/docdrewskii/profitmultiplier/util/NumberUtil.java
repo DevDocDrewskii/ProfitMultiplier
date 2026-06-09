@@ -2,7 +2,6 @@ package me.docdrewskii.profitmultiplier.util;
 
 import java.text.DecimalFormat;
 
-/** Number formatting helpers shared by menus, messages and placeholders. */
 public final class NumberUtil {
 
     private static final DecimalFormat COMMA = new DecimalFormat("#,##0");
@@ -12,7 +11,6 @@ public final class NumberUtil {
     private NumberUtil() {
     }
 
-    /** 1234567 -> "1,234,567" */
     public static String commas(long value) {
         return COMMA.format(value);
     }
@@ -21,12 +19,10 @@ public final class NumberUtil {
         return COMMA_DECIMAL.format(value);
     }
 
-    /** 1.1 -> "1.1", 1.25 -> "1.25" */
     public static String multiplier(double value) {
         return MULT.format(value);
     }
 
-    /** 12500 -> "12.5K", 1000000 -> "1M", 1500000000 -> "1.5B" */
     public static String abbreviate(long value) {
         if (value < 1000L) return Long.toString(value);
         if (value < 1_000_000L) return trim(value / 1_000.0) + "K";
@@ -35,10 +31,6 @@ public final class NumberUtil {
         return trim(value / 1_000_000_000_000.0) + "T";
     }
 
-    /**
-     * Render a unicode progress bar. {@code current}/{@code goal} fills the bar.
-     * A goal of 0 (already maxed) renders fully complete.
-     */
     public static String progressBar(long current, long goal, int length, char symbol,
                                      String completeColor, String incompleteColor) {
         int filled;

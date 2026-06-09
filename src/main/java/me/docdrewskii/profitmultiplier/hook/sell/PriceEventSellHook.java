@@ -5,11 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-/**
- * Reflective hook for shops whose sell event exposes a simple {@code getPrice()/setPrice()}
- * money value (ShopGUI+, zShop). Subclasses just describe how to read player/material/amount/
- * price from their event and how to write the new price back.
- */
 public abstract class PriceEventSellHook extends ReflectiveSellHook {
 
     protected PriceEventSellHook(ProfitMultiplier plugin, SellProcessor processor) {

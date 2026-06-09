@@ -5,10 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-/**
- * ShopGUI+ integration via {@code net.brcdev.shopgui.event.ShopPreTransactionEvent}
- * (getShopAction / getPlayer / getShopItem / getAmount / getPrice / setPrice).
- */
 public class ShopGuiPlusHook extends PriceEventSellHook {
 
     public ShopGuiPlusHook(ProfitMultiplier plugin, SellProcessor processor) {

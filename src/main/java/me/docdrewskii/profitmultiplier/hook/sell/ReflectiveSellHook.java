@@ -11,14 +11,6 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Base for shop hooks that talk to plugins we don't compile against. It registers a Bukkit
- * listener for an event class resolved by name at runtime (so there is no hard dependency),
- * then hands each event to {@link #handleEvent}. Subclasses do the reflective extraction.
- *
- * Any reflection failure disables only this hook (or skips one transaction) and is logged
- * under debug — it never propagates into the shop plugin.
- */
 public abstract class ReflectiveSellHook implements SellHook {
 
     private static final Listener DUMMY_LISTENER = new Listener() {
@@ -35,7 +27,6 @@ public abstract class ReflectiveSellHook implements SellHook {
 
     protected abstract String[] eventClassNames();
 
-    /** Inspect the event reflectively and, if it's a boostable sell, apply the multiplier. */
     protected abstract void handleEvent(Event event) throws Exception;
 
     @Override
@@ -53,7 +44,7 @@ public abstract class ReflectiveSellHook implements SellHook {
                         (listener, event) -> dispatch(event), plugin, true);
                 registered++;
             } catch (ClassNotFoundException notFound) {
-                // This version of the shop plugin doesn't ship that event — fine, try the rest.
+
             } catch (Throwable t) {
                 plugin.getLogger().warning("[" + pluginName() + "] could not hook " + className + ": " + t.getMessage());
             }
@@ -71,9 +62,6 @@ public abstract class ReflectiveSellHook implements SellHook {
         }
     }
 
-    // ----- reflection helpers -----
-
-    /** Invoke a public method by name + arg count (first match). Throws if not found/failed. */
     protected Object call(Object target, String name, Object... args) throws Exception {
         Method method = findMethod(target.getClass(), name, args.length);
         if (method == null) {
@@ -82,7 +70,6 @@ public abstract class ReflectiveSellHook implements SellHook {
         return method.invoke(target, args);
     }
 
-    /** Try several no-arg getter names on a target until one returns an ItemStack; null if none. */
     protected ItemStack tryItemStack(Object target, String... names) {
         if (target == null) return null;
         for (String name : names) {

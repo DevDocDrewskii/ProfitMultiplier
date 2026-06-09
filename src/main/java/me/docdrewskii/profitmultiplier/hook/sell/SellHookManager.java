@@ -7,13 +7,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Detects which supported shop plugins are installed and registers a hook for each (subject
- * to the {@code hooks:} toggles in config.yml). All hooks share one {@link SellProcessor}.
- *
- * Integrations: EconomyShopGUI (+ Premium), ShopGUI+, zShop, UltimateShop, GUIShop. Adding
- * another shop is just another SellHook registered here.
- */
 public class SellHookManager {
 
     private final ProfitMultiplier plugin;
@@ -29,7 +22,6 @@ public class SellHookManager {
         active.clear();
         ConfigurationSection hooks = plugin.getConfig().getConfigurationSection("hooks");
 
-        // EconomyShopGUI references its API directly, so only construct it when present.
         if (Bukkit.getPluginManager().getPlugin("EconomyShopGUI") != null
                 || Bukkit.getPluginManager().getPlugin("EconomyShopGUI-Premium") != null) {
             register(new EconomyShopGuiHook(plugin, processor), hooks);

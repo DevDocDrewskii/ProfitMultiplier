@@ -1,31 +1,3 @@
-# ============================================================
-#  /pm gui groups  —  Multiplier Group Browser  (PAGINATED)
-# ============================================================
-#
-#  Demonstrates BOTH new features at once:
-#
-#  1) CUSTOM GROUPS
-#     `content-source: groups` auto-fills the content area with one icon per group
-#     defined in config.yml — crops, mob_drops, and anything else you add. You never
-#     edit this file when you add a group; it just appears here.
-#
-#  2) PAGINATION
-#     When you have more groups than `content-slots` can show, extra groups overflow
-#     onto further pages. The [next-page]/[previous-page] buttons navigate, and the
-#     arrows auto-hide on the first/last page via hide-on-first-page / hide-on-last-page.
-#
-#  Tokens available to the `content:` template (per group, live per-viewer):
-#     {icon} {group} {group_name} {sold} {sold_short} {current_multiplier}
-#     {max_multiplier} {tier_count} {threshold} {threshold_short} {remaining}
-#     {remaining_short} {progress_bar} {progress_percent} {status}
-#  Page tokens available to EVERY item here:
-#     {page} {total_pages} {next_page} {previous_page}
-#
-#  (To page through the TIERS of one group instead, set: content-source: tiers:crops)
-# ============================================================
-
-# NOTE: inventory titles are fixed when the menu opens, so page tokens like {page}
-# don't belong here — the live "Page x/y" is shown on the page-info item below instead.
 title: "&8» &2&lMultiplier Groups"
 size: 54
 update: true
@@ -35,7 +7,6 @@ filler:
   material: GRAY_STAINED_GLASS_PANE
   name: " "
 
-# The content area that gets filled with groups, one per slot, paged automatically.
 content-slots:
   - "10-16"
   - "19-25"
@@ -44,7 +15,6 @@ content-slots:
 
 content-source: groups
 
-# Template rendered once per group entry.
 content:
   material: "{icon}"
   name: "&a&l{group_name}"
@@ -62,14 +32,13 @@ content:
       - "[message] &a{group_name}&7: &f{sold} &7sold — currently &a{current_multiplier}x&7."
       - "[sound] UI_BUTTON_CLICK 1 1.2"
 
-# Static navigation row (slots 45-53). These appear on every page.
 items:
 
   previous:
     material: ARROW
     slot: 48
     name: "&e« Previous Page"
-    hide-on-first-page: true     # hidden while on page 1
+    hide-on-first-page: true
     lore:
       - "&7Go to page &f{previous_page}&7."
     actions:
@@ -89,7 +58,7 @@ items:
     material: ARROW
     slot: 50
     name: "&eNext Page »"
-    hide-on-last-page: true      # hidden while on the last page
+    hide-on-last-page: true
     lore:
       - "&7Go to page &f{next_page}&7."
     actions:
