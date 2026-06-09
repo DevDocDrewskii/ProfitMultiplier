@@ -1,0 +1,41 @@
+name: ProfitMultiplier
+version: "1.0.0"
+main: me.docdrewskii.profitmultiplier.ProfitMultiplier
+# Must be "major.minor[.patch]" format. "1.13" is the lowest modern value:
+# ignored on 1.8-1.12 servers, accepted by everything 1.13 through 26.x.
+api-version: "1.13"
+description: Cumulative sell-progression multiplier for multiple shop plugins
+author: DocDrewskii
+
+# Everything is optional — the plugin loads with whatever you have installed. It hooks
+# every supported shop it finds. softdepend just guarantees we load AFTER them.
+softdepend:
+  - Vault
+  - EconomyShopGUI
+  - EconomyShopGUI-Premium
+  - ShopGUIPlus
+  - zShop
+  - UltimateShop
+  - GUIShop
+  - PlaceholderAPI
+  - Nexo
+  - Oraxen
+  - ItemsAdder
+  - HeadDatabase
+
+commands:
+  profitmultiplier:
+    description: ProfitMultiplier main command
+    aliases: [pm, sellmulti]
+    usage: "/pm <gui|reload|reset|resetall|stats>"
+
+permissions:
+  profitmultiplier.admin:
+    description: Access to ProfitMultiplier admin commands (reload, reset, resetall, open menus for others)
+    default: op
+  profitmultiplier.stats:
+    description: Allows viewing your own sell-progression stats
+    default: true
+  profitmultiplier.gui:
+    description: Allows opening the sell-multiplier menu
+    default: true

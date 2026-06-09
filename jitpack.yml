@@ -1,0 +1,6 @@
+# JitPack build settings.
+# This project's Gradle (8.14) and toolchain require a modern JDK, so pin JDK 21.
+jdk:
+  - openjdk21
+install:
+  - ./gradlew build publishToMavenLocal -x test --no-daemon

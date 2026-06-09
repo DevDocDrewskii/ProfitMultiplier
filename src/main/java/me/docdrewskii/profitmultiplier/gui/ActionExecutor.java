@@ -1,0 +1,111 @@
+package me.docdrewskii.profitmultiplier.gui;
+
+import me.docdrewskii.profitmultiplier.ProfitMultiplier;
+import me.docdrewskii.profitmultiplier.util.TextUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+/** Runs the parsed {@link MenuAction}s produced when a menu item is clicked. */
+public class ActionExecutor {
+
+    private final ProfitMultiplier plugin;
+
+    public ActionExecutor(ProfitMultiplier plugin) {
+        this.plugin = plugin;
+    }
+
+    public void run(Player player, List<MenuAction> actions, Map<String, String> tokens) {
+        if (actions == null || actions.isEmpty()) return;
+        for (MenuAction action : actions) {
+            execute(player, action, tokens);
+        }
+    }
+
+    private void execute(Player player, MenuAction action, Map<String, String> tokens) {
+        String arg = action.getArgument();
+        switch (action.getType()) {
+            case MESSAGE:
+                player.sendMessage(TextUtil.render(player, arg, tokens));
+                break;
+            case BROADCAST:
+                Bukkit.broadcastMessage(TextUtil.render(player, arg, tokens));
+                break;
+            case CONSOLE:
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command(player, arg, tokens));
+                break;
+            case PLAYER:
+                player.performCommand(command(player, arg, tokens));
+                break;
+            case CLOSE:
+                player.closeInventory();
+                break;
+            case OPEN:
+                openLater(player, command(player, arg, tokens).trim());
+                break;
+            case SOUND:
+                playSound(player, command(player, arg, tokens));
+                break;
+            case REFRESH:
+                plugin.getMenuManager().refresh(player);
+                break;
+            case NEXT_PAGE:
+                plugin.getMenuManager().nextPage(player);
+                break;
+            case PREVIOUS_PAGE:
+                plugin.getMenuManager().previousPage(player);
+                break;
+            case PAGE:
+                try {
+                    plugin.getMenuManager().gotoPage(player, Integer.parseInt(command(player, arg, tokens).trim()));
+                } catch (NumberFormatException ignored) {
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    /** Expand tokens + PAPI for a command/argument string, but never apply color codes. */
+    private String command(Player player, String raw, Map<String, String> tokens) {
+        String out = TextUtil.tokens(raw, tokens);
+        out = TextUtil.papi(player, out);
+        // A leading slash from copy/paste would break dispatchCommand/performCommand.
+        if (out.startsWith("/")) out = out.substring(1);
+        return out;
+    }
+
+    private void openLater(Player player, String menuName) {
+        // Defer to the next tick so we are not opening a new inventory from inside the
+        // InventoryClickEvent of the current one.
+        Bukkit.getScheduler().runTask(plugin, () -> plugin.getMenuManager().open(player, menuName));
+    }
+
+    @SuppressWarnings({"deprecation", "removal"})
+    private void playSound(Player player, String raw) {
+        if (raw == null || raw.trim().isEmpty()) return;
+        String[] parts = raw.trim().split("\\s+");
+        float volume = 1.0f;
+        float pitch = 1.0f;
+        try {
+            if (parts.length >= 2) volume = Float.parseFloat(parts[1]);
+            if (parts.length >= 3) pitch = Float.parseFloat(parts[2]);
+        } catch (NumberFormatException ignored) {
+        }
+        try {
+            Sound sound = Sound.valueOf(parts[0].toUpperCase(Locale.ROOT));
+            player.playSound(player.getLocation(), sound, volume, pitch);
+        } catch (IllegalArgumentException ex) {
+            // Modern servers accept namespaced keys (e.g. "minecraft:ui.button.click").
+            try {
+                player.playSound(player.getLocation(), parts[0].toLowerCase(Locale.ROOT), volume, pitch);
+            } catch (Throwable ignored) {
+                plugin.getLogger().warning("Unknown sound in menu action: " + parts[0]);
+            }
+        }
+    }
+}

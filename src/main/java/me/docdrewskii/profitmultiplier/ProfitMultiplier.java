@@ -1,0 +1,113 @@
+package me.docdrewskii.profitmultiplier;
+
+import me.docdrewskii.profitmultiplier.api.ProfitMultiplierAPI;
+import me.docdrewskii.profitmultiplier.api.ProfitMultiplierProvider;
+import me.docdrewskii.profitmultiplier.api.impl.ProfitMultiplierAPIImpl;
+import me.docdrewskii.profitmultiplier.command.ProfitCommand;
+import me.docdrewskii.profitmultiplier.config.ConfigManager;
+import me.docdrewskii.profitmultiplier.config.LangManager;
+import me.docdrewskii.profitmultiplier.currency.CurrencyManager;
+import me.docdrewskii.profitmultiplier.data.PlayerDataManager;
+import me.docdrewskii.profitmultiplier.gui.MenuListener;
+import me.docdrewskii.profitmultiplier.gui.MenuManager;
+import me.docdrewskii.profitmultiplier.hook.sell.SellHookManager;
+import me.docdrewskii.profitmultiplier.placeholder.ProfitPlaceholders;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.plugin.ServicePriority;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class ProfitMultiplier extends JavaPlugin {
+
+    private static final long PERIODIC_TICKS = 20L * 60L * 5L;
+    private static final long MENU_REFRESH_TICKS = 20L;
+
+    private ConfigManager configManager;
+    private LangManager langManager;
+    private CurrencyManager currencyManager;
+    private PlayerDataManager dataManager;
+    private MenuManager menuManager;
+    private SellHookManager sellHookManager;
+
+    @Override
+    public void onEnable() {
+        configManager = new ConfigManager(this);
+        configManager.load();
+
+        langManager = new LangManager(this);
+        langManager.load();
+
+        currencyManager = new CurrencyManager(this);
+        currencyManager.load();
+
+        dataManager = new PlayerDataManager(this);
+        dataManager.load();
+        dataManager.checkAutoReset();
+
+        menuManager = new MenuManager(this);
+        menuManager.loadAll();
+
+        ProfitMultiplierAPI api = new ProfitMultiplierAPIImpl(this);
+        ProfitMultiplierProvider.register(api);
+        getServer().getServicesManager().register(ProfitMultiplierAPI.class, api, this, ServicePriority.Normal);
+
+        sellHookManager = new SellHookManager(this);
+        sellHookManager.registerAll();
+
+        getServer().getPluginManager().registerEvents(new MenuListener(this), this);
+
+        // Keep any open live-updating menus (update: true) refreshed so progress bars and
+        // placeholders stay current without the player re-opening the GUI.
+        getServer().getScheduler().runTaskTimer(this, () -> menuManager.refreshOpenMenus(),
+                MENU_REFRESH_TICKS, MENU_REFRESH_TICKS);
+
+        PluginCommand command = getCommand("profitmultiplier");
+        if (command != null) {
+            ProfitCommand handler = new ProfitCommand(this);
+            command.setExecutor(handler);
+            command.setTabCompleter(handler);
+        }
+
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new ProfitPlaceholders(this).register();
+            getLogger().info("Hooked into PlaceholderAPI.");
+        }
+
+        getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
+            dataManager.checkAutoReset();
+            dataManager.saveIfDirty();
+        }, PERIODIC_TICKS, PERIODIC_TICKS);
+
+        getLogger().info("ProfitMultiplier v" + getDescription().getVersion() + " enabled.");
+    }
+
+    @Override
+    public void onDisable() {
+        ProfitMultiplierProvider.unregister();
+        if (dataManager != null) dataManager.save();
+        getLogger().info("ProfitMultiplier disabled.");
+    }
+
+    public ConfigManager getConfigManager() {
+        return configManager;
+    }
+
+    public LangManager getLang() {
+        return langManager;
+    }
+
+    public CurrencyManager getCurrencyManager() {
+        return currencyManager;
+    }
+
+    public PlayerDataManager getDataManager() {
+        return dataManager;
+    }
+
+    public MenuManager getMenuManager() {
+        return menuManager;
+    }
+
+    public SellHookManager getSellHookManager() {
+        return sellHookManager;
+    }
+}

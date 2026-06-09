@@ -1,0 +1,73 @@
+package me.docdrewskii.profitmultiplier.util;
+
+import java.text.DecimalFormat;
+
+/** Number formatting helpers shared by menus, messages and placeholders. */
+public final class NumberUtil {
+
+    private static final DecimalFormat COMMA = new DecimalFormat("#,##0");
+    private static final DecimalFormat COMMA_DECIMAL = new DecimalFormat("#,##0.##");
+    private static final DecimalFormat MULT = new DecimalFormat("0.##");
+
+    private NumberUtil() {
+    }
+
+    /** 1234567 -> "1,234,567" */
+    public static String commas(long value) {
+        return COMMA.format(value);
+    }
+
+    public static String commas(double value) {
+        return COMMA_DECIMAL.format(value);
+    }
+
+    /** 1.1 -> "1.1", 1.25 -> "1.25" */
+    public static String multiplier(double value) {
+        return MULT.format(value);
+    }
+
+    /** 12500 -> "12.5K", 1000000 -> "1M", 1500000000 -> "1.5B" */
+    public static String abbreviate(long value) {
+        if (value < 1000L) return Long.toString(value);
+        if (value < 1_000_000L) return trim(value / 1_000.0) + "K";
+        if (value < 1_000_000_000L) return trim(value / 1_000_000.0) + "M";
+        if (value < 1_000_000_000_000L) return trim(value / 1_000_000_000.0) + "B";
+        return trim(value / 1_000_000_000_000.0) + "T";
+    }
+
+    /**
+     * Render a unicode progress bar. {@code current}/{@code goal} fills the bar.
+     * A goal of 0 (already maxed) renders fully complete.
+     */
+    public static String progressBar(long current, long goal, int length, char symbol,
+                                     String completeColor, String incompleteColor) {
+        int filled;
+        if (goal <= 0) {
+            filled = length;
+        } else {
+            double ratio = (double) current / (double) goal;
+            if (ratio < 0) ratio = 0;
+            if (ratio > 1) ratio = 1;
+            filled = (int) Math.round(ratio * length);
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(completeColor);
+        for (int i = 0; i < length; i++) {
+            if (i == filled) sb.append(incompleteColor);
+            sb.append(symbol);
+        }
+        return sb.toString();
+    }
+
+    public static int percent(long current, long goal) {
+        if (goal <= 0) return 100;
+        double ratio = (double) current / (double) goal;
+        if (ratio < 0) ratio = 0;
+        if (ratio > 1) ratio = 1;
+        return (int) Math.round(ratio * 100);
+    }
+
+    private static String trim(double value) {
+        return MULT.format(value);
+    }
+}
