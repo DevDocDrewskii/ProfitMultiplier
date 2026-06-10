@@ -32,6 +32,12 @@ time based on each player's progression.
 - **Fully configurable GUI** (`/sellmulti`) - filler items, custom items via
   **Nexo / Oraxen / ItemsAdder / HeadDatabase**, **PlaceholderAPI** support everywhere,
   **click actions**, **pagination**, and live-updating progress bars.
+- **Milestone commands** - run any console command when a player unlocks a tier (crate keys,
+  titles, broadcasts), globally or per tier.
+- **Threshold scaling** - permission-based discounts so donor ranks level up faster
+  (e.g. VIPs need 20% fewer lifetime sales).
+- **Discord webhooks** - announce milestone achievements to your community, as a classic
+  embed or a Components V2 message. Fully templated.
 - **PlaceholderAPI** expansion for placards, scoreboards, holograms, etc.
 - **Developer API** - read progression, react to milestones, modify the boost. See
   [DEVELOPERS.md](DEVELOPERS.md).

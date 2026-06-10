@@ -7,6 +7,7 @@ import me.docdrewskii.profitmultiplier.model.MultiplierTier;
 import me.docdrewskii.profitmultiplier.util.VersionHelper;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.permissions.Permissible;
 
 import java.util.*;
 
@@ -23,7 +24,11 @@ public class ConfigManager {
     private boolean defaultEnabled;
     private int defaultThreshold;
     private double defaultMultiplier;
+    private List<MultiplierTier> defaultLadder;
     private final Set<Material> blacklist = new HashSet<>();
+
+    private boolean thresholdScalingEnabled;
+    private final Map<String, Double> thresholdScaleRules = new LinkedHashMap<>();
 
     private boolean autoResetEnabled;
     private long autoResetIntervalMillis;
@@ -55,20 +60,7 @@ public class ConfigManager {
                 ConfigurationSection itemSection = itemsSection.getConfigurationSection(key);
                 if (itemSection == null) continue;
 
-                List<Map<?, ?>> tierList = itemSection.getMapList("tiers");
-                List<MultiplierTier> tiers = new ArrayList<>();
-                for (Map<?, ?> tierMap : tierList) {
-                    Object thresholdObj = tierMap.get("threshold");
-                    Object multiplierObj = tierMap.get("multiplier");
-                    if (thresholdObj == null || multiplierObj == null) continue;
-                    try {
-                        int threshold = Integer.parseInt(thresholdObj.toString());
-                        double multiplier = Double.parseDouble(multiplierObj.toString());
-                        tiers.add(new MultiplierTier(threshold, multiplier));
-                    } catch (NumberFormatException e) {
-                        plugin.getLogger().warning("Invalid tier values for item " + key);
-                    }
-                }
+                List<MultiplierTier> tiers = parseTiers(itemSection.getMapList("tiers"), "item " + key);
                 tiers.sort(Comparator.comparingInt(MultiplierTier::getThreshold));
                 if (!tiers.isEmpty()) {
                     itemTiers.put(mat, tiers);
@@ -132,6 +124,32 @@ public class ConfigManager {
         } else {
             defaultEnabled = false;
         }
+        defaultLadder = Collections.singletonList(new MultiplierTier(defaultThreshold, defaultMultiplier));
+
+        thresholdScalingEnabled = false;
+        thresholdScaleRules.clear();
+        ConfigurationSection scaling = plugin.getConfig().getConfigurationSection("threshold-scaling");
+        if (scaling != null && scaling.getBoolean("enabled", false)) {
+            ConfigurationSection ranks = scaling.getConfigurationSection("ranks");
+            if (ranks != null) {
+                for (String key : ranks.getKeys(false)) {
+                    ConfigurationSection rank = ranks.getConfigurationSection(key);
+                    if (rank == null) continue;
+                    String permission = rank.getString("permission");
+                    double scale = rank.getDouble("scale", 1.0);
+                    if (permission == null || permission.isEmpty()) {
+                        plugin.getLogger().warning("threshold-scaling rank '" + key + "' has no permission — skipped.");
+                        continue;
+                    }
+                    if (scale <= 0) {
+                        plugin.getLogger().warning("threshold-scaling rank '" + key + "' has invalid scale " + scale + " — skipped.");
+                        continue;
+                    }
+                    thresholdScaleRules.put(permission, scale);
+                }
+            }
+            thresholdScalingEnabled = !thresholdScaleRules.isEmpty();
+        }
 
         ConfigurationSection ar = plugin.getConfig().getConfigurationSection("auto-reset");
         if (ar != null) {
@@ -145,14 +163,35 @@ public class ConfigManager {
         debug = plugin.getConfig().getBoolean("debug", false);
     }
 
+    public static long scaledThreshold(int threshold, double scale) {
+        if (scale == 1.0) return threshold;
+        return Math.max(1L, (long) Math.ceil(threshold * scale));
+    }
+
+    public double getThresholdScale(Permissible player) {
+        if (!thresholdScalingEnabled || player == null) return 1.0;
+        double best = Double.NaN;
+        for (Map.Entry<String, Double> rule : thresholdScaleRules.entrySet()) {
+            if (player.hasPermission(rule.getKey())) {
+                double scale = rule.getValue();
+                if (Double.isNaN(best) || scale < best) best = scale;
+            }
+        }
+        return Double.isNaN(best) ? 1.0 : best;
+    }
+
     public double computeSaleValue(Material material, long prevTotal, int amount, double basePerUnit) {
+        return computeSaleValue(material, prevTotal, amount, basePerUnit, 1.0);
+    }
+
+    public double computeSaleValue(Material material, long prevTotal, int amount, double basePerUnit, double scale) {
         long start = prevTotal + 1;
         long end = prevTotal + amount;
         double total = 0.0;
         long pos = start;
         while (pos <= end) {
-            double m = multiplierAtCount(material, pos);
-            long next = nextThresholdAbove(material, pos);
+            double m = multiplierAtCount(material, pos, scale);
+            long next = nextThresholdAbove(material, pos, scale);
             long segEnd = (next == Long.MAX_VALUE) ? end : Math.min(end, next - 1);
             if (segEnd < pos) segEnd = pos;
             long count = segEnd - pos + 1;
@@ -163,47 +202,75 @@ public class ConfigManager {
     }
 
     public double multiplierAtCount(Material material, long count) {
+        return multiplierAtCount(material, count, 1.0);
+    }
+
+    public double multiplierAtCount(Material material, long count, double scale) {
         List<MultiplierTier> tiers = itemTiers.get(material);
         if (tiers != null) {
             double best = 1.0;
             for (MultiplierTier t : tiers) {
-                if (count >= t.getThreshold()) best = t.getMultiplier();
+                if (count >= scaledThreshold(t.getThreshold(), scale)) best = t.getMultiplier();
             }
             return best;
         }
-        if (defaultEnabled && !blacklist.contains(material) && count >= defaultThreshold) {
+        if (defaultEnabled && !blacklist.contains(material)
+                && count >= scaledThreshold(defaultThreshold, scale)) {
             return defaultMultiplier;
         }
         return 1.0;
     }
 
     public long activeThreshold(Material material, long count) {
+        return activeThreshold(material, count, 1.0);
+    }
+
+    public long activeThreshold(Material material, long count, double scale) {
         List<MultiplierTier> tiers = itemTiers.get(material);
         if (tiers != null) {
             long best = 0L;
             for (MultiplierTier t : tiers) {
-                if (count >= t.getThreshold()) best = t.getThreshold();
+                long threshold = scaledThreshold(t.getThreshold(), scale);
+                if (count >= threshold) best = threshold;
             }
             return best;
         }
-        if (defaultEnabled && !blacklist.contains(material) && count >= defaultThreshold) {
-            return defaultThreshold;
+        long threshold = scaledThreshold(defaultThreshold, scale);
+        if (defaultEnabled && !blacklist.contains(material) && count >= threshold) {
+            return threshold;
         }
         return 0L;
     }
 
     public long nextThresholdAbove(Material material, long count) {
+        return nextThresholdAbove(material, count, 1.0);
+    }
+
+    public long nextThresholdAbove(Material material, long count, double scale) {
         List<MultiplierTier> tiers = itemTiers.get(material);
         if (tiers != null) {
             for (MultiplierTier t : tiers) {
-                if (t.getThreshold() > count) return t.getThreshold();
+                long threshold = scaledThreshold(t.getThreshold(), scale);
+                if (threshold > count) return threshold;
             }
             return Long.MAX_VALUE;
         }
-        if (defaultEnabled && !blacklist.contains(material) && defaultThreshold > count) {
-            return defaultThreshold;
+        long threshold = scaledThreshold(defaultThreshold, scale);
+        if (defaultEnabled && !blacklist.contains(material) && threshold > count) {
+            return threshold;
         }
         return Long.MAX_VALUE;
+    }
+
+    public List<MultiplierTier> getLadderTiers(Material material) {
+        List<MultiplierTier> tiers = itemTiers.get(material);
+        if (tiers != null) return tiers;
+        if (defaultEnabled && !blacklist.contains(material)) return defaultLadder;
+        return null;
+    }
+
+    public boolean isDefaultLadder(List<MultiplierTier> tiers) {
+        return tiers == defaultLadder;
     }
 
     public boolean hasItemTiers(Material material) {
@@ -223,38 +290,58 @@ public class ConfigManager {
     }
 
     public double groupMultiplierAtCount(ItemGroup group, long count) {
+        return groupMultiplierAtCount(group, count, 1.0);
+    }
+
+    public double groupMultiplierAtCount(ItemGroup group, long count, double scale) {
         double best = 1.0;
         for (MultiplierTier t : group.getTiers()) {
-            if (count >= t.getThreshold()) best = t.getMultiplier();
+            if (count >= scaledThreshold(t.getThreshold(), scale)) best = t.getMultiplier();
         }
         return best;
     }
 
     public long groupActiveThreshold(ItemGroup group, long count) {
+        return groupActiveThreshold(group, count, 1.0);
+    }
+
+    public long groupActiveThreshold(ItemGroup group, long count, double scale) {
         long best = 0L;
         for (MultiplierTier t : group.getTiers()) {
-            if (count >= t.getThreshold()) best = t.getThreshold();
+            long threshold = scaledThreshold(t.getThreshold(), scale);
+            if (count >= threshold) best = threshold;
         }
         return best;
     }
 
     public long groupNextThresholdAbove(ItemGroup group, long count) {
+        return groupNextThresholdAbove(group, count, 1.0);
+    }
+
+    public long groupNextThresholdAbove(ItemGroup group, long count, double scale) {
         for (MultiplierTier t : group.getTiers()) {
-            if (t.getThreshold() > count) return t.getThreshold();
+            long threshold = scaledThreshold(t.getThreshold(), scale);
+            if (threshold > count) return threshold;
         }
         return Long.MAX_VALUE;
     }
 
     public double computeUnifiedSaleValue(Material material, ItemGroup group, GroupStackMode mode,
                                           long prevItem, long prevGroup, int amount, double basePerUnit) {
+        return computeUnifiedSaleValue(material, group, mode, prevItem, prevGroup, amount, basePerUnit, 1.0);
+    }
+
+    public double computeUnifiedSaleValue(Material material, ItemGroup group, GroupStackMode mode,
+                                          long prevItem, long prevGroup, int amount, double basePerUnit,
+                                          double scale) {
         double total = 0.0;
         int k = 0;
         while (k < amount) {
             long itemCount = prevItem + k + 1;
             long groupCount = prevGroup + k + 1;
 
-            double materialMult = (mode == GroupStackMode.GROUP) ? 1.0 : multiplierAtCount(material, itemCount);
-            double groupMult = (mode == GroupStackMode.ITEM) ? 1.0 : groupMultiplierAtCount(group, groupCount);
+            double materialMult = (mode == GroupStackMode.GROUP) ? 1.0 : multiplierAtCount(material, itemCount, scale);
+            double groupMult = (mode == GroupStackMode.ITEM) ? 1.0 : groupMultiplierAtCount(group, groupCount, scale);
 
             double eff;
             switch (mode) {
@@ -265,9 +352,9 @@ public class ConfigManager {
 
             long remaining = amount - k;
             long itemSpan = (mode == GroupStackMode.GROUP) ? remaining
-                    : spanTo(nextThresholdAbove(material, itemCount), itemCount, remaining);
+                    : spanTo(nextThresholdAbove(material, itemCount, scale), itemCount, remaining);
             long groupSpan = (mode == GroupStackMode.ITEM) ? remaining
-                    : spanTo(groupNextThresholdAbove(group, groupCount), groupCount, remaining);
+                    : spanTo(groupNextThresholdAbove(group, groupCount, scale), groupCount, remaining);
 
             long span = Math.min(itemSpan, groupSpan);
             if (span < 1) span = 1;
@@ -285,13 +372,17 @@ public class ConfigManager {
     }
 
     public double computeGroupSaleValue(ItemGroup group, long prevTotal, int amount, double basePerUnit) {
+        return computeGroupSaleValue(group, prevTotal, amount, basePerUnit, 1.0);
+    }
+
+    public double computeGroupSaleValue(ItemGroup group, long prevTotal, int amount, double basePerUnit, double scale) {
         long start = prevTotal + 1;
         long end = prevTotal + amount;
         double total = 0.0;
         long pos = start;
         while (pos <= end) {
-            double m = groupMultiplierAtCount(group, pos);
-            long next = groupNextThresholdAbove(group, pos);
+            double m = groupMultiplierAtCount(group, pos, scale);
+            long next = groupNextThresholdAbove(group, pos, scale);
             long segEnd = (next == Long.MAX_VALUE) ? end : Math.min(end, next - 1);
             if (segEnd < pos) segEnd = pos;
             long count = segEnd - pos + 1;
@@ -312,12 +403,24 @@ public class ConfigManager {
                 double multiplier = Double.parseDouble(multiplierObj.toString());
                 Object iconObj = tierMap.get("icon");
                 String icon = iconObj == null ? null : iconObj.toString();
-                tiers.add(new MultiplierTier(threshold, multiplier, icon));
+                tiers.add(new MultiplierTier(threshold, multiplier, icon, parseTierCommands(tierMap.get("commands"))));
             } catch (NumberFormatException e) {
                 plugin.getLogger().warning("Invalid tier values for " + label);
             }
         }
         return tiers;
+    }
+
+    private List<String> parseTierCommands(Object raw) {
+        if (!(raw instanceof List)) return null;
+        List<String> commands = new ArrayList<>();
+        for (Object entry : (List<?>) raw) {
+            if (entry != null) {
+                String command = entry.toString().trim();
+                if (!command.isEmpty()) commands.add(command);
+            }
+        }
+        return commands.isEmpty() ? null : commands;
     }
 
     private void mergeMissingDefaults() {

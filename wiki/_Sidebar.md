@@ -12,6 +12,7 @@
 - [[Groups|Configuration-Groups]]
 - [[Stacking Multipliers|Stacking-Multipliers]]
 - [[Custom Currencies|Currencies]]
+- [[Milestones & Discord|Milestones]]
 - [[Auto-Reset|Configuration-Auto-Reset]]
 - [[Messages (lang.yml)|Messages]]
 

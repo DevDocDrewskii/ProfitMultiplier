@@ -455,7 +455,8 @@ public class MenuManager {
         t.put("player", player.getName());
 
         long sold = pdm.getGroupSold(player.getUniqueId(), group.getMaterials());
-        double current = cfg.groupMultiplierAtCount(group, sold);
+        double scale = cfg.getThresholdScale(player);
+        double current = cfg.groupMultiplierAtCount(group, sold, scale);
 
         t.put("group", group.getName());
         t.put("group_name", group.getDisplayName() != null ? group.getDisplayName() : capitalize(group.getName()));
@@ -473,11 +474,11 @@ public class MenuManager {
         double displayMult;
 
         if (tierThreshold >= 0) {
-            goal = tierThreshold;
+            goal = ConfigManager.scaledThreshold((int) tierThreshold, scale);
             unlocked = sold >= goal;
-            displayMult = tierMultiplier(cfg, group, goal);
+            displayMult = tierMultiplier(cfg, group, tierThreshold);
         } else {
-            long next = cfg.groupNextThresholdAbove(group, sold);
+            long next = cfg.groupNextThresholdAbove(group, sold, scale);
             maxed = (next == Long.MAX_VALUE);
             goal = maxed ? 0L : next;
             unlocked = maxed;

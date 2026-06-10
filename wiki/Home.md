@@ -21,6 +21,8 @@ is nothing to migrate.
   and EssentialsX `/sell`.
 - **Fully configurable GUI** - custom items, PlaceholderAPI, click actions, pagination.
 - **Custom currencies** - display formatting per group; multiplier works with any currency.
+- **Milestones** - run console commands on tier-up, scale thresholds per donor rank, and
+  announce achievements to Discord (embed or Components V2). See [[Milestones & Discord|Milestones]].
 - **Auto-updating configs** - new default groups, messages, and menu files are merged into
   existing installs on update; your own values are never overwritten.
 - **Developer API** - read progression, react to milestones, modify the boost.

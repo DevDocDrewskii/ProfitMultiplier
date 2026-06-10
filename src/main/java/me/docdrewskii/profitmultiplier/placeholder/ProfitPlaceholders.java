@@ -52,6 +52,7 @@ public class ProfitPlaceholders extends PlaceholderExpansion {
         PlayerDataManager pdm = plugin.getDataManager();
         ConfigManager cfg = plugin.getConfigManager();
         String key = params.toLowerCase();
+        double scale = cfg.getThresholdScale(player.getPlayer());
 
         if (key.equals("sold_total")) {
             return String.valueOf(pdm.getTotalSold(id));
@@ -76,19 +77,19 @@ public class ProfitPlaceholders extends PlaceholderExpansion {
         if (key.startsWith("multiplier_")) {
             Material m = VersionHelper.resolveMaterial(params.substring("multiplier_".length()));
             if (m == null) return "1";
-            return MULT.format(cfg.multiplierAtCount(m, pdm.getSold(id, m)));
+            return MULT.format(cfg.multiplierAtCount(m, pdm.getSold(id, m), scale));
         }
         if (key.startsWith("next_threshold_")) {
             Material m = VersionHelper.resolveMaterial(params.substring("next_threshold_".length()));
             if (m == null) return "";
-            long next = cfg.nextThresholdAbove(m, pdm.getSold(id, m));
+            long next = cfg.nextThresholdAbove(m, pdm.getSold(id, m), scale);
             return next == Long.MAX_VALUE ? "MAX" : String.valueOf(next);
         }
         if (key.startsWith("remaining_")) {
             Material m = VersionHelper.resolveMaterial(params.substring("remaining_".length()));
             if (m == null) return "";
             long soldAmt = pdm.getSold(id, m);
-            long next = cfg.nextThresholdAbove(m, soldAmt);
+            long next = cfg.nextThresholdAbove(m, soldAmt, scale);
             return next == Long.MAX_VALUE ? "0" : String.valueOf(next - soldAmt);
         }
 
@@ -99,31 +100,31 @@ public class ProfitPlaceholders extends PlaceholderExpansion {
         if (key.startsWith("group_multiplier_")) {
             ItemGroup g = cfg.getGroup(params.substring("group_multiplier_".length()));
             if (g == null) return "1";
-            return MULT.format(cfg.groupMultiplierAtCount(g, pdm.getGroupSold(id, g.getMaterials())));
+            return MULT.format(cfg.groupMultiplierAtCount(g, pdm.getGroupSold(id, g.getMaterials()), scale));
         }
         if (key.startsWith("group_active_threshold_")) {
             ItemGroup g = cfg.getGroup(params.substring("group_active_threshold_".length()));
             if (g == null) return "0";
-            return String.valueOf(cfg.groupActiveThreshold(g, pdm.getGroupSold(id, g.getMaterials())));
+            return String.valueOf(cfg.groupActiveThreshold(g, pdm.getGroupSold(id, g.getMaterials()), scale));
         }
         if (key.startsWith("group_next_threshold_")) {
             ItemGroup g = cfg.getGroup(params.substring("group_next_threshold_".length()));
             if (g == null) return "";
-            long next = cfg.groupNextThresholdAbove(g, pdm.getGroupSold(id, g.getMaterials()));
+            long next = cfg.groupNextThresholdAbove(g, pdm.getGroupSold(id, g.getMaterials()), scale);
             return next == Long.MAX_VALUE ? "MAX" : String.valueOf(next);
         }
         if (key.startsWith("group_remaining_")) {
             ItemGroup g = cfg.getGroup(params.substring("group_remaining_".length()));
             if (g == null) return "";
             long soldAmt = pdm.getGroupSold(id, g.getMaterials());
-            long next = cfg.groupNextThresholdAbove(g, soldAmt);
+            long next = cfg.groupNextThresholdAbove(g, soldAmt, scale);
             return next == Long.MAX_VALUE ? "0" : String.valueOf(next - soldAmt);
         }
         if (key.startsWith("group_progress_")) {
             ItemGroup g = cfg.getGroup(params.substring("group_progress_".length()));
             if (g == null) return "0";
             long soldAmt = pdm.getGroupSold(id, g.getMaterials());
-            long next = cfg.groupNextThresholdAbove(g, soldAmt);
+            long next = cfg.groupNextThresholdAbove(g, soldAmt, scale);
             if (next == Long.MAX_VALUE) return "100";
             return String.valueOf(NumberUtil.percent(soldAmt, next));
         }

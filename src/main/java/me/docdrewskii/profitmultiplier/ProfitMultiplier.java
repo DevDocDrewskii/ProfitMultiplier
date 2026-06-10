@@ -11,6 +11,7 @@ import me.docdrewskii.profitmultiplier.data.PlayerDataManager;
 import me.docdrewskii.profitmultiplier.gui.MenuListener;
 import me.docdrewskii.profitmultiplier.gui.MenuManager;
 import me.docdrewskii.profitmultiplier.hook.sell.SellHookManager;
+import me.docdrewskii.profitmultiplier.milestone.MilestoneManager;
 import me.docdrewskii.profitmultiplier.placeholder.ProfitPlaceholders;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.ServicePriority;
@@ -26,6 +27,7 @@ public class ProfitMultiplier extends JavaPlugin {
     private CurrencyManager currencyManager;
     private PlayerDataManager dataManager;
     private MenuManager menuManager;
+    private MilestoneManager milestoneManager;
     private SellHookManager sellHookManager;
 
     @Override
@@ -45,6 +47,9 @@ public class ProfitMultiplier extends JavaPlugin {
 
         menuManager = new MenuManager(this);
         menuManager.loadAll();
+
+        milestoneManager = new MilestoneManager(this);
+        milestoneManager.load();
 
         ProfitMultiplierAPI api = new ProfitMultiplierAPIImpl(this);
         ProfitMultiplierProvider.register(api);
@@ -103,6 +108,10 @@ public class ProfitMultiplier extends JavaPlugin {
 
     public MenuManager getMenuManager() {
         return menuManager;
+    }
+
+    public MilestoneManager getMilestoneManager() {
+        return milestoneManager;
     }
 
     public SellHookManager getSellHookManager() {

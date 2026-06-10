@@ -254,6 +254,52 @@ default:
     - COMMAND_BLOCK
     - STRUCTURE_BLOCK
 
+threshold-scaling:
+  enabled: false
+  ranks:
+    vip:
+      permission: profitmultiplier.scale.vip
+      scale: 0.8
+    mvp:
+      permission: profitmultiplier.scale.mvp
+      scale: 0.65
+
+milestones:
+  include-default-ladder: false
+  commands:
+    on-tier: []
+    on-max-tier: []
+  discord:
+    enabled: false
+    webhook-url: ""
+    username: "ProfitMultiplier"
+    avatar-url: ""
+    announce: max-tier
+    style: embed
+    embed:
+      title: "🏆 Milestone reached!"
+      description: "**{player}** unlocked **{multiplier}x** on **{name}**!"
+      color: "#FFD700"
+      thumbnail: "https://mc-heads.net/avatar/{uuid}"
+      footer: "ProfitMultiplier"
+      timestamp: true
+      fields:
+        - name: "Tier"
+          value: "{tier}/{tiers}"
+          inline: true
+        - name: "Total sold"
+          value: "{total_formatted}"
+          inline: true
+    components-v2:
+      accent-color: "#FFD700"
+      components:
+        - type: section
+          text: "## 🏆 Milestone reached\n**{player}** unlocked **{multiplier}x** on **{name}**"
+          thumbnail: "https://mc-heads.net/avatar/{uuid}"
+        - type: separator
+        - type: text
+          text: "-# Tier {tier}/{tiers} • Total sold: {total_formatted}"
+
 auto-reset:
   enabled: false
   interval: WEEKLY

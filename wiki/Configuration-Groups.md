@@ -37,7 +37,7 @@ groups:
 | Field | Required | Meaning |
 |-------|----------|---------|
 | `materials` | yes | Materials whose sales feed the shared counter. |
-| `tiers` | yes | `{ threshold, multiplier, icon? }` ladder (icon is optional, per tier). |
+| `tiers` | yes | `{ threshold, multiplier, icon?, commands? }` ladder (icon and per-tier [[milestone commands|Milestones]] are optional). |
 | `icon` | no | Menu icon for the group. Any [[icon form|Menus-Items-and-Icons]] (MATERIAL, `nexo:id`, `hdb:1234`, ...). |
 | `display-name` | no | Pretty name shown by `{group_name}` and `%..._group_display_<g>%`. |
 | `stack-mode` | no | How the group combines with a material's own multiplier: `group` (default), `item`, or `stack`. See [[Stacking Multipliers|Stacking-Multipliers]]. |

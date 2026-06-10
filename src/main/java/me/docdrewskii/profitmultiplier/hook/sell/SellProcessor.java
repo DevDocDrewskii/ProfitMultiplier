@@ -58,13 +58,14 @@ public class SellProcessor {
         ItemGroup group = cfg.getGroupFor(material);
         long prevItem = pdm.getSold(uuid, material);
         double basePerUnit = originalPrice / amount;
+        double scale = cfg.getThresholdScale(player);
 
         if (group != null) {
             long prevGroup = pdm.getGroupSold(uuid, group.getMaterials());
             return cfg.computeUnifiedSaleValue(material, group, group.getStackMode(),
-                    prevItem, prevGroup, amount, basePerUnit);
+                    prevItem, prevGroup, amount, basePerUnit, scale);
         }
-        return cfg.computeSaleValue(material, prevItem, amount, basePerUnit);
+        return cfg.computeSaleValue(material, prevItem, amount, basePerUnit, scale);
     }
 
     public void recordSale(Player player, Material material, int amount, double originalPrice, double finalPrice) {
@@ -112,13 +113,14 @@ public class SellProcessor {
     private void announceThresholds(Player player, Material material, int amount,
                                     ItemGroup group, long prevItem, long prevGroup) {
         ConfigManager cfg = plugin.getConfigManager();
+        double scale = cfg.getThresholdScale(player);
 
         if (group != null && group.getStackMode() != GroupStackMode.ITEM) {
             long newGroup = prevGroup + amount;
-            double oldG = cfg.groupMultiplierAtCount(group, prevGroup);
-            double newG = cfg.groupMultiplierAtCount(group, newGroup);
+            double oldG = cfg.groupMultiplierAtCount(group, prevGroup, scale);
+            double newG = cfg.groupMultiplierAtCount(group, newGroup, scale);
             if (newG > oldG) {
-                long threshold = cfg.groupActiveThreshold(group, newGroup);
+                long threshold = cfg.groupActiveThreshold(group, newGroup, scale);
                 plugin.getServer().getPluginManager().callEvent(new ThresholdReachedEvent(
                         player, material, newGroup, oldG, newG, threshold));
                 plugin.getLang().send(player, "group-threshold-reached",
@@ -127,15 +129,17 @@ public class SellProcessor {
                         "{multiplier}", MULT_FORMAT.format(newG),
                         "{threshold}", String.valueOf(threshold));
             }
+            plugin.getMilestoneManager().handleCrossings(
+                    player, material, group, group.getTiers(), prevGroup, newGroup, scale);
         }
 
         boolean itemLadderActive = (group == null) || group.getStackMode() != GroupStackMode.GROUP;
         if (itemLadderActive) {
             long newItem = prevItem + amount;
-            double oldI = cfg.multiplierAtCount(material, prevItem);
-            double newI = cfg.multiplierAtCount(material, newItem);
+            double oldI = cfg.multiplierAtCount(material, prevItem, scale);
+            double newI = cfg.multiplierAtCount(material, newItem, scale);
             if (newI > oldI) {
-                long threshold = cfg.activeThreshold(material, newItem);
+                long threshold = cfg.activeThreshold(material, newItem, scale);
                 if (group == null) {
                     plugin.getServer().getPluginManager().callEvent(new ThresholdReachedEvent(
                             player, material, newItem, oldI, newI, threshold));
@@ -146,6 +150,8 @@ public class SellProcessor {
                         "{multiplier}", MULT_FORMAT.format(newI),
                         "{threshold}", String.valueOf(threshold));
             }
+            plugin.getMilestoneManager().handleCrossings(
+                    player, material, null, cfg.getLadderTiers(material), prevItem, newItem, scale);
         }
     }
 

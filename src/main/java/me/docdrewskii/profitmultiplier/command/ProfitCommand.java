@@ -51,6 +51,7 @@ public class ProfitCommand implements TabExecutor {
                 lang.load();
                 plugin.getCurrencyManager().load();
                 plugin.getMenuManager().loadAll();
+                plugin.getMilestoneManager().load();
                 lang.send(sender, "config-reloaded");
                 return true;
 
@@ -150,8 +151,10 @@ public class ProfitCommand implements TabExecutor {
             return;
         }
         plugin.getLang().send(sender, "stats-header", "{player}", label);
+        Player online = Bukkit.getPlayer(id);
+        double scale = online != null ? plugin.getConfigManager().getThresholdScale(online) : 1.0;
         for (Map.Entry<Material, Long> e : totals.entrySet()) {
-            double mult = plugin.getConfigManager().multiplierAtCount(e.getKey(), e.getValue());
+            double mult = plugin.getConfigManager().multiplierAtCount(e.getKey(), e.getValue(), scale);
             String multText = mult > 1.0 ? "&b" + mult + "x" : "&7none";
             plugin.getLang().send(sender, "stats-line",
                     "{item}", friendly(e.getKey()),
