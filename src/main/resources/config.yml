@@ -4,6 +4,7 @@ hooks:
   zShop: true
   UltimateShop: true
   GUIShop: true
+  Essentials: true
 
 currency:
   symbol: "$"

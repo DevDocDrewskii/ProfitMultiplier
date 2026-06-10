@@ -25,7 +25,8 @@ time based on each player's progression.
   - A **default** ladder for everything else
 - **Stacking control** - per group: group multiplier wins, item multiplier wins, or
   **both stack** (item `1.5x` × group `1.2x` = `1.8x`).
-- **Multi-shop support** - EconomyShopGUI (+ Premium), ShopGUI+, zShop, UltimateShop, GUIShop.
+- **Multi-shop support** - EconomyShopGUI (+ Premium), ShopGUI+, zShop, UltimateShop, GUIShop,
+  and EssentialsX `/sell`.
 - **Custom currencies** - display formatting per group; the multiplier itself is
   currency-agnostic (works with whatever your shop pays in).
 - **Fully configurable GUI** (`/sellmulti`) - filler items, custom items via
@@ -42,7 +43,7 @@ time based on each player's progression.
 ## 📦 Installation
 
 1. Install a supported shop plugin (one of: **EconomyShopGUI**, **ShopGUI+**, **zShop**,
-   **UltimateShop**, **GUIShop**) and its economy (e.g. Vault).
+   **UltimateShop**, **GUIShop**, **EssentialsX** `/sell`) and its economy (e.g. Vault).
 2. Drop `ProfitMultiplier-x.x.x.jar` into `/plugins`.
 3. *(Optional)* Install **PlaceholderAPI** and any custom-item plugin you want to use in menus.
 4. Restart the server. Edit `plugins/ProfitMultiplier/config.yml`, then `/pm reload`.
@@ -167,6 +168,7 @@ A few of the available placeholders (full list in `config.yml`):
 | **zShop** | `ZShopSellEvent` / `ZShopSellAllEvent` |
 | **UltimateShop** | `ItemPreTransactionEvent` (scales the reward) |
 | **GUIShop** | `DynamicPriceProvider`; reliable for sales **through the shop GUI** |
+| **EssentialsX** | `/sell` (`hand`/`inventory`/`blocks`/item); bonus paid on top of the worth payout |
 
 Toggle any of them in `config.yml → hooks`.
 

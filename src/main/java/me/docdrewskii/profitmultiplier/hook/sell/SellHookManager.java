@@ -30,10 +30,11 @@ public class SellHookManager {
         register(new ZShopHook(plugin, processor), hooks);
         register(new UltimateShopHook(plugin, processor), hooks);
         register(new GuiShopHook(plugin, processor), hooks);
+        register(new EssentialsSellHook(plugin, processor), hooks);
 
         if (active.isEmpty()) {
             plugin.getLogger().warning("No supported shop plugin detected — sell multipliers will not "
-                    + "apply. Supported: EconomyShopGUI, ShopGUIPlus, zShop, UltimateShop, GUIShop.");
+                    + "apply. Supported: EconomyShopGUI, ShopGUIPlus, zShop, UltimateShop, GUIShop, Essentials.");
         } else {
             plugin.getLogger().info("Sell hooks active: " + active);
         }

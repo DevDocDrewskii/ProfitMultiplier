@@ -12,6 +12,7 @@ every supported shop that is installed and hooks it automatically.
 | zShop | `ZShopSellEvent` / `ZShopSellAllEvent` (`setPrice`) |
 | UltimateShop | `ItemPreTransactionEvent` (scales the reward) |
 | GUIShop | `DynamicPriceProvider` (player recovered from the shop GUI) |
+| EssentialsX | `/sell` command (inventory diff + worth lookup; bonus paid on top) |
 
 ## Enabling and disabling
 
@@ -24,6 +25,7 @@ hooks:
   zShop: true
   UltimateShop: true
   GUIShop: true
+  Essentials: true
 ```
 
 A hook only registers if its plugin is present. Setting a key to `false` skips it. Changing a
@@ -39,6 +41,19 @@ The console prints which hooks are active on startup:
 
 If a sale is not being boosted, enable `debug: true` in `config.yml` to log each transaction
 the hook sees.
+
+## EssentialsX note
+
+EssentialsX has no pre-sell price event, so the multiplier cannot raise the `/sell` payout
+itself. Instead, ProfitMultiplier watches `/sell` (including `hand`, `inventory`, `blocks`),
+detects what was sold, recomputes the base payout from Essentials' `worth.yml` (including
+Essentials' own permission multiplier), and **deposits the bonus on top** through the
+Essentials economy. Essentials pays the base amount as usual; ProfitMultiplier pays the
+difference one tick later.
+
+This covers the `/sell` command only — Essentials `[Sell]` signs are not boosted. If another
+plugin owns the `/sell` command on your server, the hook leaves it alone (it only reacts when
+the command resolves to Essentials).
 
 ## GUIShop note
 

@@ -17,7 +17,8 @@ is nothing to migrate.
 - **Three ladder types** - per-item, shared groups, and a default fallback. See [[How It Works|How-It-Works]].
 - **Stacking control** - decide per group whether the group multiplier replaces, defers to, or
   multiplies with a material's own multiplier. See [[Stacking Multipliers|Stacking-Multipliers]].
-- **Multi-shop support** - EconomyShopGUI (+ Premium), ShopGUI+, zShop, UltimateShop, GUIShop.
+- **Multi-shop support** - EconomyShopGUI (+ Premium), ShopGUI+, zShop, UltimateShop, GUIShop,
+  and EssentialsX `/sell`.
 - **Fully configurable GUI** - custom items, PlaceholderAPI, click actions, pagination.
 - **Custom currencies** - display formatting per group; multiplier works with any currency.
 - **Auto-updating configs** - new default groups, messages, and menu files are merged into

@@ -4,7 +4,8 @@
 
 - A Spigot or Paper server, version **1.8 through 26.x**.
 - **One supported shop plugin** (this is where the multiplier is applied):
-  EconomyShopGUI, EconomyShopGUI-Premium, ShopGUI+, zShop, UltimateShop, or GUIShop.
+  EconomyShopGUI, EconomyShopGUI-Premium, ShopGUI+, zShop, UltimateShop, GUIShop, or
+  EssentialsX (its `/sell` command).
 - **Vault** plus an economy plugin, if your shop uses Vault for payouts.
 - Optional: **PlaceholderAPI** for placeholders, and any of
   **Nexo / Oraxen / ItemsAdder / HeadDatabase** for custom menu icons.
