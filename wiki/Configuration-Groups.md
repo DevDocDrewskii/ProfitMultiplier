@@ -42,6 +42,7 @@ groups:
 | `display-name` | no | Pretty name shown by `{group_name}` and `%..._group_display_<g>%`. |
 | `stack-mode` | no | How the group combines with a material's own multiplier: `group` (default), `item`, or `stack`. See [[Stacking Multipliers|Stacking-Multipliers]]. |
 | `currency` | no | A named currency from the [[currency section|Currencies]], used to format this group's payout messages. |
+| `milestones` | no | `on-tier` / `on-max-tier` command lists for this group's ladder. See [[Milestones & Discord|Milestones]]. |
 
 ## Default groups
 

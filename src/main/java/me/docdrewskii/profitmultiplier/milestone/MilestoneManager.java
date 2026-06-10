@@ -3,6 +3,7 @@ package me.docdrewskii.profitmultiplier.milestone;
 import me.docdrewskii.profitmultiplier.ProfitMultiplier;
 import me.docdrewskii.profitmultiplier.config.ConfigManager;
 import me.docdrewskii.profitmultiplier.model.ItemGroup;
+import me.docdrewskii.profitmultiplier.model.MilestoneCommands;
 import me.docdrewskii.profitmultiplier.model.MultiplierTier;
 import me.docdrewskii.profitmultiplier.util.NumberUtil;
 import org.bukkit.Bukkit;
@@ -75,6 +76,16 @@ public class MilestoneManager {
                 player, material, group, tier, tierNumber, tierCount, threshold, total);
 
         runCommands(tier.getCommands(), placeholders);
+
+        MilestoneCommands scoped = group != null ? group.getMilestones()
+                : plugin.getConfigManager().getItemMilestones(material);
+        if (scoped != null) {
+            runCommands(scoped.getOnTier(), placeholders);
+            if (max) {
+                runCommands(scoped.getOnMaxTier(), placeholders);
+            }
+        }
+
         runCommands(onTier, placeholders);
         if (max) {
             runCommands(onMaxTier, placeholders);

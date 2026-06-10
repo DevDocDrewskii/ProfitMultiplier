@@ -3,6 +3,7 @@ package me.docdrewskii.profitmultiplier.config;
 import me.docdrewskii.profitmultiplier.ProfitMultiplier;
 import me.docdrewskii.profitmultiplier.model.GroupStackMode;
 import me.docdrewskii.profitmultiplier.model.ItemGroup;
+import me.docdrewskii.profitmultiplier.model.MilestoneCommands;
 import me.docdrewskii.profitmultiplier.model.MultiplierTier;
 import me.docdrewskii.profitmultiplier.util.VersionHelper;
 import org.bukkit.Material;
@@ -16,6 +17,8 @@ public class ConfigManager {
     private final ProfitMultiplier plugin;
 
     private final Map<Material, List<MultiplierTier>> itemTiers = new HashMap<>();
+
+    private final Map<Material, MilestoneCommands> itemMilestones = new HashMap<>();
 
     private final Map<String, ItemGroup> groups = new LinkedHashMap<>();
 
@@ -45,6 +48,7 @@ public class ConfigManager {
         mergeMissingDefaults();
 
         itemTiers.clear();
+        itemMilestones.clear();
         groups.clear();
         materialGroup.clear();
         blacklist.clear();
@@ -64,6 +68,10 @@ public class ConfigManager {
                 tiers.sort(Comparator.comparingInt(MultiplierTier::getThreshold));
                 if (!tiers.isEmpty()) {
                     itemTiers.put(mat, tiers);
+                    MilestoneCommands milestones = parseMilestones(itemSection.getConfigurationSection("milestones"));
+                    if (milestones != null) {
+                        itemMilestones.put(mat, milestones);
+                    }
                 }
             }
         }
@@ -97,9 +105,10 @@ public class ConfigManager {
                 GroupStackMode stackMode = GroupStackMode.fromString(
                         groupSection.getString("stack-mode", groupSection.getString("stacking", null)));
                 String currency = groupSection.getString("currency", null);
+                MilestoneCommands milestones = parseMilestones(groupSection.getConfigurationSection("milestones"));
 
                 ItemGroup group = new ItemGroup(key.toLowerCase(Locale.ROOT), members, tiers,
-                        icon, displayName, stackMode, currency);
+                        icon, displayName, stackMode, currency, milestones);
                 groups.put(group.getName(), group);
                 for (Material mat : members) {
                     materialGroup.putIfAbsent(mat, group);
@@ -271,6 +280,28 @@ public class ConfigManager {
 
     public boolean isDefaultLadder(List<MultiplierTier> tiers) {
         return tiers == defaultLadder;
+    }
+
+    public MilestoneCommands getItemMilestones(Material material) {
+        return itemMilestones.get(material);
+    }
+
+    private MilestoneCommands parseMilestones(ConfigurationSection section) {
+        if (section == null) return null;
+        List<String> onTier = cleanCommands(section.getStringList("on-tier"));
+        List<String> onMaxTier = cleanCommands(section.getStringList("on-max-tier"));
+        if (onTier.isEmpty() && onMaxTier.isEmpty()) return null;
+        return new MilestoneCommands(onTier, onMaxTier);
+    }
+
+    private List<String> cleanCommands(List<String> raw) {
+        List<String> commands = new ArrayList<>();
+        for (String command : raw) {
+            if (command != null && !command.trim().isEmpty()) {
+                commands.add(command.trim());
+            }
+        }
+        return commands;
     }
 
     public boolean hasItemTiers(Material material) {

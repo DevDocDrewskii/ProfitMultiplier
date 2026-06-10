@@ -14,9 +14,16 @@ public class ItemGroup {
     private final String displayName;
     private final GroupStackMode stackMode;
     private final String currency;
+    private final MilestoneCommands milestones;
 
     public ItemGroup(String name, Set<Material> materials, List<MultiplierTier> tiers,
                      String icon, String displayName, GroupStackMode stackMode, String currency) {
+        this(name, materials, tiers, icon, displayName, stackMode, currency, null);
+    }
+
+    public ItemGroup(String name, Set<Material> materials, List<MultiplierTier> tiers,
+                     String icon, String displayName, GroupStackMode stackMode, String currency,
+                     MilestoneCommands milestones) {
         this.name = name;
         this.materials = materials;
         this.tiers = tiers;
@@ -24,6 +31,7 @@ public class ItemGroup {
         this.displayName = displayName;
         this.stackMode = stackMode;
         this.currency = currency;
+        this.milestones = milestones;
     }
 
     public String getName() {
@@ -56,6 +64,10 @@ public class ItemGroup {
 
     public String getCurrency() {
         return currency;
+    }
+
+    public MilestoneCommands getMilestones() {
+        return milestones;
     }
 
     public double getMaxMultiplier() {

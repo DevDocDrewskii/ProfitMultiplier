@@ -38,6 +38,7 @@ items:
 | `threshold` | Cumulative units of this material the player must sell to unlock the tier. |
 | `multiplier` | The sell multiplier once the threshold is reached (1.0 = no change). |
 | `commands` | Optional console commands run when the tier is unlocked. See [[Milestones & Discord|Milestones]]. |
+| `milestones` | Optional `on-tier` / `on-max-tier` command lists for this material's ladder. See [[Milestones & Discord|Milestones]]. |
 
 Tiers do not need to be sorted in the file; they are sorted by threshold on load.
 

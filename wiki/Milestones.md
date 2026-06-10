@@ -50,9 +50,10 @@ milestones:
 - `on-max-tier` additionally runs when the unlocked tier is the **final** tier of its ladder.
 - Empty lists disable them. No extra toggle needed.
 
-### Per-tier commands
+### Per-group and per-material commands
 
-Any tier - in `items` ladders or `groups` - can carry its own `commands` list:
+Any group or `items` ladder can carry its own `milestones` block - it fires for that ladder
+only, without repeating commands on every tier:
 
 ```yaml
 items:
@@ -62,9 +63,30 @@ items:
         multiplier: 1.1
       - threshold: 100
         multiplier: 1.5
-        commands:
-          - "crates give {player} key diamond 1"
+    milestones:
+      on-tier:
+        - "say {player} stepped up their Diamond game ({tier}/{tiers})"
+      on-max-tier:
+        - "crates give {player} key diamond 1"
 
+groups:
+  crops:
+    tiers:
+      - threshold: 10000
+        multiplier: 1.1
+      - threshold: 1000000
+        multiplier: 1.3
+    milestones:
+      on-max-tier:
+        - "broadcast &a{player} mastered Crops!"
+        - "lp user {player} permission set titles.farmer true"
+```
+
+### Per-tier commands
+
+For tier-specific rewards, any single tier can also carry a `commands` list:
+
+```yaml
 groups:
   crops:
     tiers:
@@ -74,7 +96,11 @@ groups:
           - "broadcast &a{player} sold a MILLION crops!"
 ```
 
-Per-tier commands run *in addition to* the global lists.
+### Order of execution
+
+All matching lists run, in this order: the tier's own `commands`, the ladder's
+`milestones.on-tier` (and `on-max-tier` if it is the final tier), then the global
+`milestones.commands` lists.
 
 The single-threshold `default` ladder (unlisted items) does **not** fire milestones unless
 you set `milestones.include-default-ladder: true` - it counts as a 1-tier ladder, so every
