@@ -1,6 +1,6 @@
 # ProfitMultiplier
 
-![Version](https://img.shields.io/badge/version-1.0.0-brightgreen)
+![Version](https://img.shields.io/badge/version-1.1.0-brightgreen)
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.8%20%E2%86%92%2026.x-blue)
 ![Java](https://img.shields.io/badge/Java-8%20bytecode%20(built%20with%2021)-orange)
 [![JitPack](https://jitpack.io/v/DevDocDrewskii/ProfitMultiplier.svg)](https://jitpack.io/#DevDocDrewskii/ProfitMultiplier)
@@ -187,7 +187,7 @@ reading progression, reacting to milestones, and adjusting the boost. Add it via
 
 ```kotlin
 repositories { maven("https://jitpack.io") }
-dependencies { compileOnly("com.github.DevDocDrewskii:ProfitMultiplier:1.0.0") }
+dependencies { compileOnly("com.github.DevDocDrewskii:ProfitMultiplier:1.1.0") }
 ```
 
 Full guide, examples, and publishing instructions: **[DEVELOPERS.md](DEVELOPERS.md)**.
@@ -202,8 +202,8 @@ Full guide, examples, and publishing instructions: **[DEVELOPERS.md](DEVELOPERS.
 
 Outputs to `build/libs/`:
 
-- `ProfitMultiplier-1.0.0.jar` - the plugin
-- `ProfitMultiplier-API-1.0.0.jar` - the slim developer API jar (+ `-sources`)
+- `ProfitMultiplier-1.1.0.jar` - the plugin
+- `ProfitMultiplier-API-1.1.0.jar` - the slim developer API jar (+ `-sources`)
 
 Built with the JDK 21 toolchain but emits **Java 8 bytecode** for maximum server compatibility.
 

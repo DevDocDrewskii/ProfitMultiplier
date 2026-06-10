@@ -11,7 +11,7 @@ repositories {
     maven("https://jitpack.io")
 }
 dependencies {
-    compileOnly("com.github.DevDocDrewskii:ProfitMultiplier:1.0.0")
+    compileOnly("com.github.DevDocDrewskii:ProfitMultiplier:1.1.0")
 }
 ```
 
@@ -26,7 +26,7 @@ Maven:
 <dependency>
   <groupId>com.github.DevDocDrewskii</groupId>
   <artifactId>ProfitMultiplier</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <scope>provided</scope>
 </dependency>
 ```
