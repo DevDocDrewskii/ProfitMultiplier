@@ -37,8 +37,8 @@ items:
 | `tiers` | An ordered list of `{ threshold, multiplier, commands? }`. |
 | `threshold` | Cumulative units of this material the player must sell to unlock the tier. |
 | `multiplier` | The sell multiplier once the threshold is reached (1.0 = no change). |
-| `commands` | Optional console commands run when the tier is unlocked. See [[Milestones & Discord|Milestones]]. |
-| `milestones` | Optional `on-tier` / `on-max-tier` command lists for this material's ladder. See [[Milestones & Discord|Milestones]]. |
+| `commands` | Optional console commands run when the tier is unlocked. See [Milestones & Discord](Milestones). |
+| `milestones` | Optional `on-tier` / `on-max-tier` command lists for this material's ladder. See [Milestones & Discord](Milestones). |
 
 Tiers do not need to be sorted in the file; they are sorted by threshold on load.
 
@@ -49,12 +49,12 @@ At 100 total they move to `1.5x`. The multiplier never drops unless the totals a
 
 ## Interaction with groups
 
-If a material appears in both an `items` ladder and a [[group|Configuration-Groups]], the
-group's [[stack mode|Stacking-Multipliers]] decides which applies, or whether they multiply
+If a material appears in both an `items` ladder and a [group](Configuration-Groups), the
+group's [stack mode](Stacking-Multipliers) decides which applies, or whether they multiply
 together. With the default `stack-mode: group`, the group wins for its members.
 
 ## See also
 
-- [[Groups|Configuration-Groups]]
-- [[Stacking Multipliers|Stacking-Multipliers]]
-- [[How It Works|How-It-Works]]
+- [Groups](Configuration-Groups)
+- [Stacking Multipliers](Stacking-Multipliers)
+- [How It Works](How-It-Works)

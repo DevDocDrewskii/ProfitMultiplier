@@ -30,9 +30,9 @@ auto-reset:
 
 - `/pm reset <player>` - clears one player (cause `COMMAND`).
 - `/pm resetall` - clears everyone (cause `COMMAND`).
-- The [[Developer API|Developer-API]] can reset with cause `API`.
+- The [Developer API](Developer-API) can reset with cause `API`.
 
 ## See also
 
-- [[Commands & Permissions|Commands-and-Permissions]]
-- [[Developer API|Developer-API]]
+- [Commands & Permissions](Commands-and-Permissions)
+- [Developer API](Developer-API)

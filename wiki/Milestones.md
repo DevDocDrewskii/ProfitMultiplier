@@ -129,7 +129,7 @@ are free-form - define whatever fits your rank layout.
 
 Scaling applies everywhere consistently: the sale boost itself, threshold-reached messages,
 milestone commands, Discord announcements, `/pm stats`, menu progress bars, and
-PlaceholderAPI values (for online players). The [[Developer API|Developer-API]] reports
+PlaceholderAPI values (for online players). The [Developer API](Developer-API) reports
 **unscaled** base values.
 
 ## Discord webhooks

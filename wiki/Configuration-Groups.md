@@ -37,12 +37,12 @@ groups:
 | Field | Required | Meaning |
 |-------|----------|---------|
 | `materials` | yes | Materials whose sales feed the shared counter. |
-| `tiers` | yes | `{ threshold, multiplier, icon?, commands? }` ladder (icon and per-tier [[milestone commands|Milestones]] are optional). |
-| `icon` | no | Menu icon for the group. Any [[icon form|Menus-Items-and-Icons]] (MATERIAL, `nexo:id`, `hdb:1234`, ...). |
+| `tiers` | yes | `{ threshold, multiplier, icon?, commands? }` ladder (icon and per-tier [milestone commands](Milestones) are optional). |
+| `icon` | no | Menu icon for the group. Any [icon form](Menus-Items-and-Icons) (MATERIAL, `nexo:id`, `hdb:1234`, ...). |
 | `display-name` | no | Pretty name shown by `{group_name}` and `%..._group_display_<g>%`. |
-| `stack-mode` | no | How the group combines with a material's own multiplier: `group` (default), `item`, or `stack`. See [[Stacking Multipliers|Stacking-Multipliers]]. |
-| `currency` | no | A named currency from the [[currency section|Currencies]], used to format this group's payout messages. |
-| `milestones` | no | `on-tier` / `on-max-tier` command lists for this group's ladder. See [[Milestones & Discord|Milestones]]. |
+| `stack-mode` | no | How the group combines with a material's own multiplier: `group` (default), `item`, or `stack`. See [Stacking Multipliers](Stacking-Multipliers). |
+| `currency` | no | A named currency from the [currency section](Currencies), used to format this group's payout messages. |
+| `milestones` | no | `on-tier` / `on-max-tier` command lists for this group's ladder. See [Milestones & Discord](Milestones). |
 
 ## Default groups
 
@@ -60,7 +60,7 @@ or edit any you do not want.
 | `mob_drops` | Combat drops | `currency: tokens` |
 | `building` | Building blocks | - |
 
-All eight appear automatically in the paginated [[group browser|Menus-Pagination]]
+All eight appear automatically in the paginated [group browser](Menus-Pagination)
 (`/pm gui groups`).
 
 ## Make your own
@@ -68,12 +68,12 @@ All eight appear automatically in the paginated [[group browser|Menus-Pagination
 Add as many groups as you like - just copy a block and rename it. Every group you define is
 instantly available in three places, with no extra wiring:
 
-- Its own [[PlaceholderAPI placeholders|PlaceholderAPI]] (swap `crops` for the group name).
-- A slot in any paginated `content-source: groups` menu (see [[Pagination|Menus-Pagination]]).
-- A `group:`-bound menu item (see [[Menu Tokens|Menus-Tokens]]).
+- Its own [PlaceholderAPI placeholders](PlaceholderAPI) (swap `crops` for the group name).
+- A slot in any paginated `content-source: groups` menu (see [Pagination](Menus-Pagination)).
+- A `group:`-bound menu item (see [Menu Tokens](Menus-Tokens)).
 
 When you update the plugin, new default groups (and any other new config keys) are merged into
-your existing `config.yml` automatically. See [[Updating|Configuration]].
+your existing `config.yml` automatically. See [Updating](Configuration).
 
 ## Precedence
 
@@ -83,6 +83,6 @@ material that belongs to a group.
 
 ## See also
 
-- [[Stacking Multipliers|Stacking-Multipliers]]
-- [[Custom Currencies|Currencies]]
-- [[Examples & Recipes|Examples]]
+- [Stacking Multipliers](Stacking-Multipliers)
+- [Custom Currencies](Currencies)
+- [Examples & Recipes](Examples)

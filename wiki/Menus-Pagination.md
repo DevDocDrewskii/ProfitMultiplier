@@ -93,5 +93,5 @@ The framework chunks the entries across pages based on the number of `content-sl
 
 ## See also
 
-- [[Menu Tokens|Menus-Tokens]]
-- [[Click Actions|Menus-Click-Actions]]
+- [Menu Tokens](Menus-Tokens)
+- [Click Actions](Menus-Click-Actions)

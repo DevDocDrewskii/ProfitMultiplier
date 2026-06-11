@@ -48,7 +48,7 @@ groups:
       - { threshold: 250000, multiplier: 1.3 }
 ```
 
-See [[Stacking Multipliers|Stacking-Multipliers]] for the math.
+See [Stacking Multipliers](Stacking-Multipliers) for the math.
 
 ## 4. A group paid in a custom currency
 
@@ -136,6 +136,6 @@ items:
 
 ## See also
 
-- [[Groups|Configuration-Groups]]
-- [[Menus|Menus]]
-- [[PlaceholderAPI|PlaceholderAPI]]
+- [Groups](Configuration-Groups)
+- [Menus](Menus)
+- [PlaceholderAPI](PlaceholderAPI)

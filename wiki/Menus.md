@@ -44,23 +44,23 @@ filler:
 
 ## Items
 
-Each entry under `items:` is one icon. See [[Items & Icons|Menus-Items-and-Icons]] for the
-full field list, and [[Menu Tokens|Menus-Tokens]] for the live placeholders you can use in
+Each entry under `items:` is one icon. See [Items & Icons](Menus-Items-and-Icons) for the
+full field list, and [Menu Tokens](Menus-Tokens) for the live placeholders you can use in
 names and lore.
 
 ## Click actions
 
 Every item can run actions per click type (left, right, shift, and more). See
-[[Click Actions|Menus-Click-Actions]].
+[Click Actions](Menus-Click-Actions).
 
 ## Pagination
 
 A menu can auto-fill a content area from a data source (all groups, or the tiers of one group)
-and page through it. See [[Pagination|Menus-Pagination]].
+and page through it. See [Pagination](Menus-Pagination).
 
 ## See also
 
-- [[Items & Icons|Menus-Items-and-Icons]]
-- [[Click Actions|Menus-Click-Actions]]
-- [[Pagination|Menus-Pagination]]
-- [[Menu Tokens|Menus-Tokens]]
+- [Items & Icons](Menus-Items-and-Icons)
+- [Click Actions](Menus-Click-Actions)
+- [Pagination](Menus-Pagination)
+- [Menu Tokens](Menus-Tokens)

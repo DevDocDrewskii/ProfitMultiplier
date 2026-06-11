@@ -1,6 +1,6 @@
 # Stacking Multipliers
 
-When a material belongs to **both** an `items` ladder and a [[group|Configuration-Groups]],
+When a material belongs to **both** an `items` ladder and a [group](Configuration-Groups),
 the group's `stack-mode` decides how the two multipliers combine. For a material that is only
 in a group (the common case), all three modes behave identically.
 
@@ -52,5 +52,5 @@ per-item ladders, and `item` when the group is only there for display or placeho
 
 ## See also
 
-- [[Groups|Configuration-Groups]]
-- [[Items|Configuration-Items]]
+- [Groups](Configuration-Groups)
+- [Items](Configuration-Items)

@@ -38,10 +38,10 @@ items:
 | `custom-model-data` / `model-data` | Custom model data integer (1.14+). |
 | `item-flags` | A list of Bukkit `ItemFlag` names (for example `HIDE_ATTRIBUTES`). |
 | `view-permission` | If set, the item only shows to players with this permission. |
-| `group` | Bind the item to a [[group|Configuration-Groups]] for live tokens. |
+| `group` | Bind the item to a [group](Configuration-Groups) for live tokens. |
 | `tier` | A specific threshold within the bound group, for tier display. |
 | `hide-on-first-page` / `hide-on-last-page` | Hide on those pages (great for nav arrows). |
-| `actions` | Per-click actions. See [[Click Actions|Menus-Click-Actions]]. |
+| `actions` | Per-click actions. See [Click Actions](Menus-Click-Actions). |
 
 ## Icon forms
 
@@ -63,9 +63,9 @@ to a barrier so the mistake is visible in-game rather than silent.
 
 When an item sets `group:` (and optionally `tier:`), ProfitMultiplier computes live, per-viewer
 tokens such as `{sold}`, `{multiplier}`, `{threshold}` and `{progress_bar}`. These work even
-without PlaceholderAPI. See [[Menu Tokens|Menus-Tokens]] for the full list.
+without PlaceholderAPI. See [Menu Tokens](Menus-Tokens) for the full list.
 
 ## See also
 
-- [[Menu Tokens|Menus-Tokens]]
-- [[Click Actions|Menus-Click-Actions]]
+- [Menu Tokens](Menus-Tokens)
+- [Click Actions](Menus-Click-Actions)

@@ -4,7 +4,7 @@ Menu names, lore, and action text support three layers of substitution, applied 
 
 1. **Local `{tokens}`** - computed per viewer for items bound to a `group` (and optionally a
    `tier`), or for dynamic pagination entries. These work even **without** PlaceholderAPI.
-2. **`%papi%` placeholders** - expanded if PlaceholderAPI is installed. See [[PlaceholderAPI]].
+2. **`%papi%` placeholders** - expanded if PlaceholderAPI is installed. See [PlaceholderAPI](PlaceholderAPI).
 3. **Colours** - `&` codes and `&#RRGGBB` hex (modern servers).
 
 ## Group / tier tokens
@@ -49,6 +49,6 @@ PlaceholderAPI. Add `%papi%` placeholders on top when you want data from other p
 
 ## See also
 
-- [[PlaceholderAPI]]
-- [[Items & Icons|Menus-Items-and-Icons]]
-- [[Pagination|Menus-Pagination]]
+- [PlaceholderAPI](PlaceholderAPI)
+- [Items & Icons](Menus-Items-and-Icons)
+- [Pagination](Menus-Pagination)

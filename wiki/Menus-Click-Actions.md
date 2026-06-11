@@ -70,6 +70,6 @@ works as written.
 
 ## See also
 
-- [[Items & Icons|Menus-Items-and-Icons]]
-- [[Pagination|Menus-Pagination]]
-- [[Menu Tokens|Menus-Tokens]]
+- [Items & Icons](Menus-Items-and-Icons)
+- [Pagination](Menus-Pagination)
+- [Menu Tokens](Menus-Tokens)

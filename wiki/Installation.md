@@ -29,7 +29,7 @@ On startup the console logs which shops were hooked:
 ```
 
 If you see `No supported shop plugin detected`, install one of the supported shops or check
-the [[hooks section|Shops]] in your config. Enable `debug: true` in `config.yml` for verbose
+the [hooks section](Shops) in your config. Enable `debug: true` in `config.yml` for verbose
 logging while you set things up.
 
 ## File layout
@@ -46,6 +46,6 @@ plugins/ProfitMultiplier/
 
 ## Next steps
 
-- Learn the model: [[How It Works|How-It-Works]]
-- Set up ladders: [[Items|Configuration-Items]] and [[Groups|Configuration-Groups]]
-- Customise the menu: [[Menus|Menus]]
+- Learn the model: [How It Works](How-It-Works)
+- Set up ladders: [Items](Configuration-Items) and [Groups](Configuration-Groups)
+- Customise the menu: [Menus](Menus)

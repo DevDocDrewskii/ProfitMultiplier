@@ -37,7 +37,7 @@ The top-level `symbol`/`position`/`format` define the **default** currency. Entr
 
 ## Assigning a currency to a group
 
-Set `currency: <name>` on a [[group|Configuration-Groups]] so that group's payout messages use
+Set `currency: <name>` on a [group](Configuration-Groups) so that group's payout messages use
 that currency's formatting:
 
 ```yaml
@@ -62,5 +62,5 @@ A sale in that group then renders as, for example, `tokens 1,234` in the
 
 ## See also
 
-- [[Messages (lang.yml)|Messages]]
-- [[Groups|Configuration-Groups]]
+- [Messages (lang.yml)](Messages)
+- [Groups](Configuration-Groups)

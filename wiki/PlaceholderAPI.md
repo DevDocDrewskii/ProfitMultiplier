@@ -52,4 +52,4 @@ Replace `<group>` with a group name (for example `crops`).
 ## Inside menus
 
 Menus also support these `%...%` placeholders, plus their own `{tokens}` that do not need
-PlaceholderAPI. See [[Menu Tokens|Menus-Tokens]].
+PlaceholderAPI. See [Menu Tokens](Menus-Tokens).

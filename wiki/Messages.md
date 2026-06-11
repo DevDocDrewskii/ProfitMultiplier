@@ -40,10 +40,10 @@ messages:
 ## Currency formatting
 
 `{base}`, `{final}` and `{bonus}` are already formatted with the relevant
-[[currency|Currencies]] (symbol included). Do not add your own `$` around them. Use
+[currency](Currencies) (symbol included). Do not add your own `$` around them. Use
 `{currency}` if you want the bare symbol.
 
 ## See also
 
-- [[Custom Currencies|Currencies]]
-- [[PlaceholderAPI|PlaceholderAPI]]
+- [Custom Currencies](Currencies)
+- [PlaceholderAPI](PlaceholderAPI)

@@ -6,14 +6,14 @@ All settings live in `plugins/ProfitMultiplier/config.yml`. After editing, run `
 
 | Section | Purpose | Page |
 |---------|---------|------|
-| `hooks` | Enable/disable each shop integration | [[Shops]] |
-| `currency` | Display symbols and formats; named currencies | [[Currencies]] |
-| `items` | Per-material multiplier ladders | [[Items|Configuration-Items]] |
-| `groups` | Shared ladders across many materials | [[Groups|Configuration-Groups]] |
+| `hooks` | Enable/disable each shop integration | [Shops](Shops) |
+| `currency` | Display symbols and formats; named currencies | [Currencies](Currencies) |
+| `items` | Per-material multiplier ladders | [Items](Configuration-Items) |
+| `groups` | Shared ladders across many materials | [Groups](Configuration-Groups) |
 | `default` | Fallback ladder for unlisted items | this page |
-| `threshold-scaling` | Permission-based threshold discounts for donor ranks | [[Milestones & Discord|Milestones]] |
-| `milestones` | Tier-up console commands and Discord webhooks | [[Milestones & Discord|Milestones]] |
-| `auto-reset` | Periodic progression wipe | [[Auto-Reset|Configuration-Auto-Reset]] |
+| `threshold-scaling` | Permission-based threshold discounts for donor ranks | [Milestones & Discord](Milestones) |
+| `milestones` | Tier-up console commands and Discord webhooks | [Milestones & Discord](Milestones) |
+| `auto-reset` | Periodic progression wipe | [Auto-Reset](Configuration-Auto-Reset) |
 | `debug` | Verbose console logging | this page |
 
 ## Default ladder
